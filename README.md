@@ -2,6 +2,11 @@
 
 Java programs for SPPU SE Computer (2024 Pattern) **Object Oriented Programming & Computer Graphics Lab** (PCC-205-COM), organised by syllabus unit. Every file is self-contained: one public class, its own `main`, no packages.
 
+## Copy-paste quickly
+Open **[ALL_CODE.md](ALL_CODE.md)**: every program on one page, in syllabus lab order (A1–A7, B1–B8), each with its problem statement.
+
+All 21 programs compile and run (verified with JDK, Nov 2026). Graphics labs need a desktop window.
+
 ## Run any program
 ```bash
 cd unit3-oop

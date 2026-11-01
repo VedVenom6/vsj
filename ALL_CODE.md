@@ -1,140 +1,47 @@
 # All OOPCG Java code in one file
 
-Each section = one file. Copy a section into a file with the same name, then `javac Name.java` and `java Name`.
+Ordered by **syllabus lab number** (SPPU 2024 pattern, PCC-205-COM).
+To use one: copy the code block into a file named exactly like the class (e.g. `ATM.java`), then `javac ATM.java` and `java ATM`.
 
 ## Index
-- [unit1-basics/ArrayStats.java](#arraystats)
-- [unit1-basics/Basics.java](#basics)
-- [unit1-basics/Calculator.java](#calculator)
-- [unit2-classes/ArgsAndIO.java](#argsandio)
-- [unit2-classes/Hotel.java](#hotel)
-- [unit2-classes/Order.java](#order)
-- [unit2-classes/StudentDemo.java](#studentdemo)
-- [unit3-oop/ATM.java](#atm)
-- [unit3-oop/Chat.java](#chat)
-- [unit3-oop/ExceptionDemo.java](#exceptiondemo)
-- [unit3-oop/MultipleInterface.java](#multipleinterface)
-- [unit3-oop/ShapesAbstract.java](#shapesabstract)
-- [unit3-oop/SingleInheritance.java](#singleinheritance)
-- [unit3-oop/ThreadBasics.java](#threadbasics)
-- [unit4-graphics/Circles.java](#circles)
-- [unit4-graphics/CohenSutherland.java](#cohensutherland)
-- [unit4-graphics/Lines.java](#lines)
-- [unit4-graphics/PolygonFill.java](#polygonfill)
-- [unit4-graphics/SutherlandHodgeman.java](#sutherlandhodgeman)
-- [unit5-transforms/Transform2D.java](#transform2d)
-- [unit5-transforms/Transform3D.java](#transform3d)
 
-## ArrayStats
-`unit1-basics/ArrayStats.java`
+**Group A – Java OOP**
 
-```java
-// Practice: read n numbers, print sum, largest, and count of even numbers
-import java.util.Scanner;
+- A1 – [Calculator](#calculator) – Calculator with user input, conditions, loops and error handling
+- A2 – [Order](#order) – E-commerce order: overloaded constructors, user input, discount, invoice
+- A3 – [Hotel](#hotel) – Hotel room booking with a 2D array: view, book, exit
+- A4 – [SingleInheritance](#singleinheritance) – Single inheritance: subclass extends superclass and calls its methods
+- A5 – [MultipleInterface](#multipleinterface) – Multiple inheritance using interfaces, polymorphism
+- A6 – [ATM](#atm) – ATM: try/catch/finally, ArithmeticException (insufficient funds), IllegalArgumentException (invalid input)
+- A7 – [Chat](#chat) – Multithreaded chat: isAlive(), join(), priorities, suspend/resume/stop
 
-public class ArrayStats {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("How many numbers? ");
-        int n = sc.nextInt();
-        int[] a = new int[n];
+**Group B – Computer Graphics**
 
-        for (int i = 0; i < n; i++) {
-            System.out.print("Enter number " + (i + 1) + ": ");
-            a[i] = sc.nextInt();
-        }
+- B1 – [Lines](#lines) – DDA rectangles (dotted, thick) + Bresenham diamond (dashed, solid)
+- B2 – [Circles](#circles) – Menu: DDA / Bresenham / Midpoint circle, solid / dotted / dashed
+- B3 – [PolygonFill](#polygonfill) – Concave polygon: scan-line, flood and seed fill
+- B4 – [SutherlandHodgeman](#sutherlandhodgeman) – Sutherland-Hodgeman polygon clipping, vertices entered interactively
+- B5 – [CohenSutherland](#cohensutherland) – Cohen-Sutherland line clipping
+- B6, B7, B8 – [Transform2D](#transform2d) – 2D translate / rotate / scale / shear / reflect; triangle & rhombus; rotation about arbitrary point
 
-        int sum = 0, max = a[0], even = 0;
-        for (int v : a) {
-            sum += v;
-            if (v > max) max = v;
-            if (v % 2 == 0) even++;
-        }
+**Extra practice (not on the lab list)**
 
-        System.out.println("Sum = " + sum);
-        System.out.println("Largest = " + max);
-        System.out.println("Even count = " + even);
-        sc.close();
-    }
-}
-```
+- [Basics](#basics) – Data types, operators, if/else, switch, loops
+- [ArrayStats](#arraystats) – Array input: sum, largest, even count
+- [StudentDemo](#studentdemo) – Class, constructors, this, static, overloading, array of objects
+- [ArgsAndIO](#argsandio) – Varargs, command-line args, BufferedReader
+- [ShapesAbstract](#shapesabstract) – Abstract class, dynamic binding
+- [ExceptionDemo](#exceptiondemo) – Built-in exceptions, nested try, throws, custom exception
+- [ThreadBasics](#threadbasics) – Threads, Runnable, synchronized
+- [Transform3D](#transform3d) – 3D translate / scale / rotate (cube)
 
-## Basics
-`unit1-basics/Basics.java`
+---
 
-```java
-// Unit 1 syntax in one runnable file: data types, casting, operators, if/else, switch, all loops
-import java.util.Scanner;
-
-public class Basics {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-
-        // ---- data types + casting ----
-        int i = 10;
-        double d = i;              // widening (automatic)
-        double pi = 9.7;
-        int cut = (int) pi;        // narrowing (manual) -> 9
-        char c = 'A';
-        boolean flag = true;
-        System.out.println(i + " " + d + " " + cut + " " + c + " " + flag);
-
-        // ---- operators ----
-        int x = 10, y = 3;
-        System.out.println("x/y = " + (x / y));                 // 3 (integer division)
-        System.out.println("x%y = " + (x % y));                 // 1
-        System.out.println("(double)x/y = " + ((double) x / y));
-        System.out.println("max = " + ((x > y) ? x : y));       // ternary
-        int a = 5;
-        System.out.println(a++ + " " + a);                      // 5 6 (post-increment)
-        System.out.println(++a + " " + a);                      // 7 7 (pre-increment)
-
-        // ---- if / else-if ----
-        System.out.print("Enter marks: ");
-        int marks = sc.nextInt();
-        if (marks >= 75) System.out.println("Distinction");
-        else if (marks >= 40) System.out.println("Pass");
-        else System.out.println("Fail");
-
-        // ---- switch ----
-        System.out.print("Enter day number (1-3): ");
-        switch (sc.nextInt()) {
-            case 1: System.out.println("Monday"); break;
-            case 2: System.out.println("Tuesday"); break;
-            case 3: System.out.println("Wednesday"); break;
-            default: System.out.println("Invalid");
-        }
-
-        // ---- loops ----
-        for (int k = 1; k <= 5; k++) System.out.print(k + " ");
-        System.out.println();
-
-        int n = 5;
-        while (n > 0) { System.out.print(n + " "); n--; }
-        System.out.println();
-
-        int m = 10;
-        do { System.out.println("do-while runs at least once, m = " + m); } while (m < 5);
-
-        int[] arr = {4, 8, 15, 16, 23, 42};
-        int sum = 0;
-        for (int v : arr) sum += v;                              // for-each
-        System.out.println("Sum = " + sum);
-
-        // break and continue
-        for (int k = 1; k <= 10; k++) {
-            if (k % 2 == 0) continue;      // skip even
-            if (k > 7) break;              // stop after 7
-            System.out.print(k + " ");     // 1 3 5 7
-        }
-        System.out.println();
-        sc.close();
-    }
-}
-```
+# Group A – Java OOP
 
 ## Calculator
-`unit1-basics/Calculator.java`
+**Lab A1: Calculator with user input, conditions, loops and error handling**  
+File: `unit1-basics/Calculator.java` · Run: `javac Calculator.java` → `java Calculator`
 
 ```java
 // Lab A1: Menu-driven calculator (Unit 1: Scanner input, switch, do-while, break/continue)
@@ -181,109 +88,9 @@ public class Calculator {
 }
 ```
 
-## ArgsAndIO
-`unit2-classes/ArgsAndIO.java`
-
-```java
-// Unit 2 extras: passing arrays, varargs, command-line args, BufferedReader, PrintWriter
-// Run: java ArgsAndIO 10 20
-import java.io.*;
-
-public class ArgsAndIO {
-    static void doubleAll(int[] a) {             // array passed by reference value -> original changes
-        for (int i = 0; i < a.length; i++) a[i] *= 2;
-    }
-
-    static int sum(int... nums) {                // varargs: nums is an int[]
-        int s = 0;
-        for (int x : nums) s += x;
-        return s;
-    }
-
-    public static void main(String[] args) throws IOException {
-        // command-line arguments are always Strings
-        if (args.length >= 2) {
-            int a = Integer.parseInt(args[0]);
-            int b = Integer.parseInt(args[1]);
-            System.out.println("Args sum = " + (a + b));
-        } else {
-            System.out.println("Tip: run as  java ArgsAndIO 10 20");
-        }
-
-        int[] arr = {1, 2, 3};
-        doubleAll(arr);
-        System.out.println("After doubleAll: " + arr[0] + " " + arr[1] + " " + arr[2]);
-        System.out.println("sum(1,2) = " + sum(1, 2) + ", sum(4,5,6) = " + sum(4, 5, 6));
-
-        // BufferedReader: reads Strings only, so parse them
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        System.out.print("Enter your name: ");
-        String name = br.readLine();
-        System.out.print("Enter your age: ");
-        int age = Integer.parseInt(br.readLine().trim());
-
-        // PrintWriter: character output stream, true = auto-flush
-        PrintWriter pw = new PrintWriter(System.out, true);
-        pw.println("Hello " + name + ", next year you will be " + (age + 1));
-    }
-}
-```
-
-## Hotel
-`unit2-classes/Hotel.java`
-
-```java
-// Lab A3: Hotel room booking using a 2D array (floors x rooms)
-import java.util.Scanner;
-
-public class Hotel {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int[][] rooms = new int[3][4];      // 0 = free, 1 = booked
-        int ch;
-
-        do {
-            System.out.println("\n1.View 2.Book 3.Cancel 0.Exit");
-            ch = sc.nextInt();
-            switch (ch) {
-                case 1:
-                    for (int f = 0; f < rooms.length; f++) {
-                        System.out.print("Floor " + (f + 1) + ": ");
-                        for (int r = 0; r < rooms[f].length; r++)
-                            System.out.print(rooms[f][r] == 0 ? "[ ] " : "[X] ");
-                        System.out.println();
-                    }
-                    break;
-                case 2:
-                case 3: {
-                    System.out.print("Floor (1-3) and Room (1-4): ");
-                    int f = sc.nextInt() - 1, r = sc.nextInt() - 1;
-                    if (f < 0 || f >= rooms.length || r < 0 || r >= rooms[0].length)
-                        System.out.println("Invalid room");
-                    else if (ch == 2 && rooms[f][r] == 1)
-                        System.out.println("Already booked");
-                    else if (ch == 3 && rooms[f][r] == 0)
-                        System.out.println("Room is not booked");
-                    else {
-                        rooms[f][r] = (ch == 2) ? 1 : 0;
-                        System.out.println(ch == 2 ? "Booked!" : "Cancelled!");
-                    }
-                    break;
-                }
-                case 0:
-                    System.out.println("Thank you!");
-                    break;
-                default:
-                    System.out.println("Invalid choice");
-            }
-        } while (ch != 0);
-        sc.close();
-    }
-}
-```
-
 ## Order
-`unit2-classes/Order.java`
+**Lab A2: E-commerce order: overloaded constructors, user input, discount, invoice**  
+File: `unit2-classes/Order.java` · Run: `javac Order.java` → `java Order`
 
 ```java
 // Lab A2: E-commerce order processing with overloaded constructors, discount, invoice
@@ -343,74 +150,173 @@ public class Order {
 }
 ```
 
-## StudentDemo
-`unit2-classes/StudentDemo.java`
+## Hotel
+**Lab A3: Hotel room booking with a 2D array: view, book, exit**  
+File: `unit2-classes/Hotel.java` · Run: `javac Hotel.java` → `java Hotel`
 
 ```java
-// Unit 2: class, fields, constructors (default/parameterized/copy), this, static,
-// getters/setters, object as parameter, returning object, overloading, array of objects
-class Student {
-    private int roll;
-    private String name;
-    private double marks;
-    static int count = 0;              // shared by all objects
+// Lab A3: Hotel room booking using a 2D array (floors x rooms)
+import java.util.Scanner;
 
-    Student() {                        // default constructor
-        this(0, "Unknown", 0);         // constructor chaining, must be first line
+public class Hotel {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int[][] rooms = new int[3][4];      // 0 = free, 1 = booked
+        int ch;
+
+        do {
+            System.out.println("\n1.View 2.Book 3.Cancel 0.Exit");
+            ch = sc.nextInt();
+            switch (ch) {
+                case 1:
+                    for (int f = 0; f < rooms.length; f++) {
+                        System.out.print("Floor " + (f + 1) + ": ");
+                        for (int r = 0; r < rooms[f].length; r++)
+                            System.out.print(rooms[f][r] == 0 ? "[ ] " : "[X] ");
+                        System.out.println();
+                    }
+                    break;
+                case 2:
+                case 3: {
+                    System.out.print("Floor (1-3) and Room (1-4): ");
+                    int f = sc.nextInt() - 1, r = sc.nextInt() - 1;
+                    if (f < 0 || f >= rooms.length || r < 0 || r >= rooms[0].length)
+                        System.out.println("Invalid room");
+                    else if (ch == 2 && rooms[f][r] == 1)
+                        System.out.println("Already booked");
+                    else if (ch == 3 && rooms[f][r] == 0)
+                        System.out.println("Room is not booked");
+                    else {
+                        rooms[f][r] = (ch == 2) ? 1 : 0;
+                        System.out.println(ch == 2 ? "Booked!" : "Cancelled!");
+                    }
+                    break;
+                }
+                case 0:
+                    System.out.println("Thank you!");
+                    break;
+                default:
+                    System.out.println("Invalid choice");
+            }
+        } while (ch != 0);
+        sc.close();
+    }
+}
+```
+
+## SingleInheritance
+**Lab A4: Single inheritance: subclass extends superclass and calls its methods**  
+File: `unit3-oop/SingleInheritance.java` · Run: `javac SingleInheritance.java` → `java SingleInheritance`
+
+```java
+// Lab A4: Single inheritance, super(), protected, method overriding (+ multilevel bonus)
+class Vehicle {
+    protected String brand;
+    protected int speed;
+
+    Vehicle(String brand, int speed) {
+        this.brand = brand;
+        this.speed = speed;
+        System.out.println("Vehicle constructor");
     }
 
-    Student(int roll, String name, double marks) {   // parameterized
-        this.roll = roll;
-        this.name = name;
-        this.marks = marks;
-        count++;
-    }
-
-    Student(Student s) {               // copy constructor (written by hand in Java)
-        this(s.roll, s.name, s.marks);
-    }
-
-    public String getName() { return name; }
-    public double getMarks() { return marks; }
-    public void setMarks(double m) {
-        if (m >= 0 && m <= 100) marks = m;
-        else System.out.println("Invalid marks");
-    }
-
-    Student topper(Student other) {    // object as parameter + returning object
-        return (this.marks >= other.marks) ? this : other;
-    }
-
-    void show() { System.out.println(roll + " " + name + " " + marks); }       // overloading
-    void show(String prefix) { System.out.println(prefix + ": " + name); }
-
-    static int getCount() { return count; }
+    void start() { System.out.println(brand + " starting"); }
+    void info()  { System.out.println("Brand: " + brand + ", Speed: " + speed); }
 }
 
-public class StudentDemo {
+class Car extends Vehicle {
+    private int doors;
+
+    Car(String brand, int speed, int doors) {
+        super(brand, speed);                 // parent constructor runs first
+        this.doors = doors;
+        System.out.println("Car constructor");
+    }
+
+    @Override
+    void info() {
+        super.info();                        // reuse parent version
+        System.out.println("Doors: " + doors);
+    }
+
+    void honk() { System.out.println("Beep!"); }
+}
+
+class SportsCar extends Car {                // multilevel: Vehicle -> Car -> SportsCar
+    SportsCar(String brand) {
+        super(brand, 300, 2);
+        System.out.println("SportsCar constructor");
+    }
+
+    @Override
+    void start() { System.out.println(brand + " roars to life!"); }
+}
+
+public class SingleInheritance {
     public static void main(String[] args) {
-        Student s1 = new Student(1, "Ved", 88);
-        Student s2 = new Student(2, "Amit", 92);
-        Student s3 = new Student(s1);
-        Student s4 = new Student();
+        Car c = new Car("Honda", 180, 4);
+        c.start();      // inherited
+        c.info();       // overridden
+        c.honk();       // own method
 
-        s1.topper(s2).show("Topper");
-        s3.setMarks(150);                      // Invalid marks
-        s4.show();
-        System.out.println("Objects: " + Student.getCount());
+        System.out.println("---- multilevel ----");
+        SportsCar s = new SportsCar("Ferrari");
+        s.start();
+        s.info();
+    }
+}
+```
 
-        Student[] list = { s1, s2, s3 };       // array of objects
-        for (Student s : list) s.show();
+## MultipleInterface
+**Lab A5: Multiple inheritance using interfaces, polymorphism**  
+File: `unit3-oop/MultipleInterface.java` · Run: `javac MultipleInterface.java` → `java MultipleInterface`
 
-        Student r = s1;                        // same object, two references
-        r.setMarks(50);
-        System.out.println("s1 marks now: " + s1.getMarks());   // 50.0
+```java
+// Lab A5: Multiple inheritance using interfaces + polymorphism through interface references
+interface Printable {
+    int MAX_PAGES = 100;                       // public static final by default
+    void print();
+}
+
+interface Scannable {
+    void scan();
+}
+
+class Machine {
+    void powerOn() { System.out.println("Machine powered on"); }
+}
+
+// extends one class AND implements two interfaces
+class Printer extends Machine implements Printable, Scannable {
+    public void print() { System.out.println("Printing document (max " + MAX_PAGES + " pages)"); }
+    public void scan()  { System.out.println("Scanning document"); }
+}
+
+class PhotoCopier implements Printable {
+    public void print() { System.out.println("Photocopying"); }
+}
+
+public class MultipleInterface {
+    public static void main(String[] args) {
+        Printer p = new Printer();
+        p.powerOn();
+        p.print();
+        p.scan();
+
+        // polymorphism: one interface reference, different objects
+        Printable[] devices = { new Printer(), new PhotoCopier() };
+        for (Printable d : devices) d.print();
+
+        Scannable s = p;
+        s.scan();
+        // s.print();  // ERROR: a Scannable reference only sees scan()
     }
 }
 ```
 
 ## ATM
-`unit3-oop/ATM.java`
+**Lab A6: ATM: try/catch/finally, ArithmeticException (insufficient funds), IllegalArgumentException (invalid input)**  
+File: `unit3-oop/ATM.java` · Run: `javac ATM.java` → `java ATM`
 
 ```java
 // Lab A6: ATM with exception handling (try, multiple catch, finally, throw)
@@ -487,7 +393,8 @@ public class ATM {
 ```
 
 ## Chat
-`unit3-oop/Chat.java`
+**Lab A7: Multithreaded chat: isAlive(), join(), priorities, suspend/resume/stop**  
+File: `unit3-oop/Chat.java` · Run: `javac Chat.java` → `java Chat`
 
 ```java
 // Lab A7: Multithreaded chat - isAlive(), join(), priorities, suspend/resume/stop.
@@ -548,267 +455,99 @@ public class Chat {
 }
 ```
 
-## ExceptionDemo
-`unit3-oop/ExceptionDemo.java`
+---
+
+# Group B – Computer Graphics
+
+## Lines
+**Lab B1: DDA rectangles (dotted, thick) + Bresenham diamond (dashed, solid)**  
+File: `unit4-graphics/Lines.java` · Run: `javac Lines.java` → `java Lines`
 
 ```java
-// Unit 3: built-in exceptions, multiple catch, nested try, throw vs throws, custom exception
-class InsufficientFundsException extends Exception {        // custom CHECKED exception
-    InsufficientFundsException(String msg) { super(msg); }
-}
+// Lab B1: DDA line (two rectangles: dotted + thick) and Bresenham line (diamond: dashed + solid)
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
-public class ExceptionDemo {
+public class Lines extends JPanel {
+    static final int W = 600, H = 500;
+    BufferedImage img = new BufferedImage(W, H, BufferedImage.TYPE_INT_RGB);
+    int color = Color.WHITE.getRGB();
 
-    // throws: declares that this method may throw a checked exception
-    static void withdraw(double bal, double amt) throws InsufficientFundsException {
-        if (amt > bal) throw new InsufficientFundsException("Need " + (amt - bal) + " more");
-        System.out.println("Withdrawn " + amt);
+    void plot(int x, int y) {                                  // putpixel
+        if (x >= 0 && x < W && y >= 0 && y < H) img.setRGB(x, y, color);
+    }
+
+    // style: 0 = solid, 1 = dotted, 2 = dashed, 3 = thick
+    void plotStyled(int x, int y, int i, int style) {
+        if (style == 1 && i % 4 != 0) return;
+        if (style == 2 && i % 12 >= 8) return;
+        plot(x, y);
+        if (style == 3) { plot(x + 1, y); plot(x, y + 1); plot(x + 1, y + 1); }
+    }
+
+    void ddaLine(int x1, int y1, int x2, int y2, int style) {
+        int dx = x2 - x1, dy = y2 - y1;
+        int steps = Math.max(Math.abs(dx), Math.abs(dy));
+        if (steps == 0) { plot(x1, y1); return; }
+        double xinc = (double) dx / steps, yinc = (double) dy / steps;
+        double x = x1, y = y1;
+        for (int i = 0; i <= steps; i++) {
+            plotStyled((int) Math.round(x), (int) Math.round(y), i, style);
+            x += xinc;
+            y += yinc;
+        }
+    }
+
+    // Bresenham for all slopes/directions (integer arithmetic only)
+    void bresLine(int x1, int y1, int x2, int y2, int style) {
+        int dx = Math.abs(x2 - x1), dy = Math.abs(y2 - y1);
+        int sx = (x1 < x2) ? 1 : -1, sy = (y1 < y2) ? 1 : -1;
+        int err = dx - dy, i = 0;
+        while (true) {
+            plotStyled(x1, y1, i++, style);
+            if (x1 == x2 && y1 == y2) break;
+            int e2 = 2 * err;
+            if (e2 > -dy) { err -= dy; x1 += sx; }
+            if (e2 <  dx) { err += dx; y1 += sy; }
+        }
+    }
+
+    void ddaRect(int x1, int y1, int x2, int y2, int style) {
+        ddaLine(x1, y1, x2, y1, style); ddaLine(x2, y1, x2, y2, style);
+        ddaLine(x2, y2, x1, y2, style); ddaLine(x1, y2, x1, y1, style);
+    }
+
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(img, 0, 0, null);
     }
 
     public static void main(String[] args) {
-        // 1. multiple catch: specific first, general last
-        try {
-            int[] a = new int[3];
-            a[5] = 10 / 2;
-        } catch (ArithmeticException e) {
-            System.out.println("Arithmetic: " + e.getMessage());
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Array index: " + e.getMessage());
-        } catch (Exception e) {
-            System.out.println("General: " + e);
-        } finally {
-            System.out.println("finally always runs");
-        }
+        Lines c = new Lines();
 
-        // 2. nested try: inner catch doesn't match, outer one handles it
-        try {
-            try {
-                int x = 10 / 0;
-            } catch (NullPointerException e) {
-                System.out.println("Inner caught NPE");
-            }
-        } catch (ArithmeticException e) {
-            System.out.println("Outer caught: " + e.getMessage());
-        }
+        c.color = Color.CYAN.getRGB();
+        c.ddaRect(100, 100, 500, 400, 1);      // outer rectangle - DDA dotted
+        c.ddaRect(150, 150, 450, 350, 3);      // inner rectangle - DDA thick
 
-        // 3. NumberFormatException
-        try {
-            int n = Integer.parseInt("abc");
-        } catch (NumberFormatException e) {
-            System.out.println("Bad number format");
-        }
+        c.color = Color.YELLOW.getRGB();       // diamond through midpoints of outer rectangle
+        c.bresLine(300, 100, 500, 250, 2);     // Bresenham dashed
+        c.bresLine(500, 250, 300, 400, 2);
+        c.bresLine(300, 400, 100, 250, 0);     // Bresenham solid
+        c.bresLine(100, 250, 300, 100, 0);
 
-        // 4. NullPointerException
-        try {
-            String s = null;
-            System.out.println(s.length());
-        } catch (NullPointerException e) {
-            System.out.println("Null reference used");
-        }
-
-        // 5. custom checked exception: must be caught or declared
-        try {
-            withdraw(1000, 500);
-            withdraw(1000, 1500);
-        } catch (InsufficientFundsException e) {
-            System.out.println("Custom: " + e.getMessage());
-        }
-    }
-}
-```
-
-## MultipleInterface
-`unit3-oop/MultipleInterface.java`
-
-```java
-// Lab A5: Multiple inheritance using interfaces + polymorphism through interface references
-interface Printable {
-    int MAX_PAGES = 100;                       // public static final by default
-    void print();
-}
-
-interface Scannable {
-    void scan();
-}
-
-class Machine {
-    void powerOn() { System.out.println("Machine powered on"); }
-}
-
-// extends one class AND implements two interfaces
-class Printer extends Machine implements Printable, Scannable {
-    public void print() { System.out.println("Printing document (max " + MAX_PAGES + " pages)"); }
-    public void scan()  { System.out.println("Scanning document"); }
-}
-
-class PhotoCopier implements Printable {
-    public void print() { System.out.println("Photocopying"); }
-}
-
-public class MultipleInterface {
-    public static void main(String[] args) {
-        Printer p = new Printer();
-        p.powerOn();
-        p.print();
-        p.scan();
-
-        // polymorphism: one interface reference, different objects
-        Printable[] devices = { new Printer(), new PhotoCopier() };
-        for (Printable d : devices) d.print();
-
-        Scannable s = p;
-        s.scan();
-        // s.print();  // ERROR: a Scannable reference only sees scan()
-    }
-}
-```
-
-## ShapesAbstract
-`unit3-oop/ShapesAbstract.java`
-
-```java
-// Unit 3: abstract class, abstract method, dynamic binding (runtime polymorphism), final, toString
-abstract class Shape {
-    final String unit = "sq units";            // final variable = constant
-
-    abstract double area();                    // no body
-
-    void display() {                           // concrete method
-        System.out.println(getClass().getSimpleName() + " area = " + String.format("%.2f", area()) + " " + unit);
-    }
-}
-
-class Circle extends Shape {
-    double r;
-    Circle(double r) { this.r = r; }
-    double area() { return Math.PI * r * r; }
-    @Override public String toString() { return "Circle(r=" + r + ")"; }   // from Object class
-}
-
-class Rect extends Shape {
-    double l, b;
-    Rect(double l, double b) { this.l = l; this.b = b; }
-    double area() { return l * b; }
-}
-
-final class Square extends Rect {              // final class: cannot be extended
-    Square(double s) { super(s, s); }
-}
-
-public class ShapesAbstract {
-    public static void main(String[] args) {
-        Shape[] shapes = { new Circle(2), new Rect(3, 4), new Square(5) };
-        for (Shape s : shapes) s.display();    // same call, different behaviour
-
-        Shape s = new Circle(1);               // parent reference, child object
-        System.out.println(s);                 // calls Circle's toString()
-        // Shape x = new Shape();              // ERROR: abstract class cannot be instantiated
-    }
-}
-```
-
-## SingleInheritance
-`unit3-oop/SingleInheritance.java`
-
-```java
-// Lab A4: Single inheritance, super(), protected, method overriding (+ multilevel bonus)
-class Vehicle {
-    protected String brand;
-    protected int speed;
-
-    Vehicle(String brand, int speed) {
-        this.brand = brand;
-        this.speed = speed;
-        System.out.println("Vehicle constructor");
-    }
-
-    void start() { System.out.println(brand + " starting"); }
-    void info()  { System.out.println("Brand: " + brand + ", Speed: " + speed); }
-}
-
-class Car extends Vehicle {
-    private int doors;
-
-    Car(String brand, int speed, int doors) {
-        super(brand, speed);                 // parent constructor runs first
-        this.doors = doors;
-        System.out.println("Car constructor");
-    }
-
-    @Override
-    void info() {
-        super.info();                        // reuse parent version
-        System.out.println("Doors: " + doors);
-    }
-
-    void honk() { System.out.println("Beep!"); }
-}
-
-class SportsCar extends Car {                // multilevel: Vehicle -> Car -> SportsCar
-    SportsCar(String brand) {
-        super(brand, 300, 2);
-        System.out.println("SportsCar constructor");
-    }
-
-    @Override
-    void start() { System.out.println(brand + " roars to life!"); }
-}
-
-public class SingleInheritance {
-    public static void main(String[] args) {
-        Car c = new Car("Honda", 180, 4);
-        c.start();      // inherited
-        c.info();       // overridden
-        c.honk();       // own method
-
-        System.out.println("---- multilevel ----");
-        SportsCar s = new SportsCar("Ferrari");
-        s.start();
-        s.info();
-    }
-}
-```
-
-## ThreadBasics
-`unit3-oop/ThreadBasics.java`
-
-```java
-// Unit 3: main thread, Runnable, multiple threads, synchronized
-class Counter {
-    int count = 0;
-    synchronized void inc() { count++; }        // only one thread at a time
-}
-
-class Task implements Runnable {                // Runnable = preferred way (class can still extend another)
-    private Counter counter;
-    Task(Counter counter) { this.counter = counter; }
-
-    public void run() {
-        for (int i = 0; i < 1000; i++) counter.inc();
-        System.out.println(Thread.currentThread().getName() + " finished");
-    }
-}
-
-public class ThreadBasics {
-    public static void main(String[] args) throws InterruptedException {
-        Thread main = Thread.currentThread();
-        System.out.println("Main thread: " + main.getName() + ", priority " + main.getPriority());
-
-        Counter c = new Counter();
-        Thread t1 = new Thread(new Task(c), "Worker-1");
-        Thread t2 = new Thread(new Task(c), "Worker-2");
-        Thread t3 = new Thread(new Task(c), "Worker-3");
-
-        t1.start(); t2.start(); t3.start();     // start() -> new thread -> run()
-        t1.join(); t2.join(); t3.join();
-
-        System.out.println("Final count = " + c.count + " (always 3000 thanks to synchronized)");
+        JFrame f = new JFrame("DDA & Bresenham Lines");
+        f.add(c);
+        f.setSize(W + 20, H + 40);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setVisible(true);
     }
 }
 ```
 
 ## Circles
-`unit4-graphics/Circles.java`
+**Lab B2: Menu: DDA / Bresenham / Midpoint circle, solid / dotted / dashed**  
+File: `unit4-graphics/Circles.java` · Run: `javac Circles.java` → `java Circles`
 
 ```java
 // Lab B2: Menu-driven circle drawing - DDA, Bresenham, Midpoint - solid / dotted / dashed
@@ -908,196 +647,9 @@ public class Circles extends JPanel {
 }
 ```
 
-## CohenSutherland
-`unit4-graphics/CohenSutherland.java`
-
-```java
-// Lab B5: Cohen-Sutherland line clipping (outcodes TBRL)
-import javax.swing.*;
-import java.awt.*;
-import java.util.Scanner;
-
-public class CohenSutherland extends JPanel {
-    static final int INSIDE = 0, LEFT = 1, RIGHT = 2, BOTTOM = 4, TOP = 8;
-    static int xmin = 150, ymin = 150, xmax = 450, ymax = 350;
-
-    double[][] original;           // lines before clipping {x1,y1,x2,y2}
-    double[][] clipped;            // after clipping (null = rejected)
-
-    static int code(double x, double y) {
-        int c = INSIDE;
-        if (x < xmin) c |= LEFT;   else if (x > xmax) c |= RIGHT;
-        if (y < ymin) c |= BOTTOM; else if (y > ymax) c |= TOP;
-        return c;
-    }
-
-    // returns clipped line or null if rejected
-    static double[] clip(double x1, double y1, double x2, double y2) {
-        int c1 = code(x1, y1), c2 = code(x2, y2);
-        while (true) {
-            if ((c1 | c2) == 0) return new double[]{x1, y1, x2, y2};   // trivially accept
-            if ((c1 & c2) != 0) return null;                           // trivially reject
-            int out = (c1 != 0) ? c1 : c2;
-            double x, y;
-            if ((out & TOP) != 0)         { x = x1 + (x2 - x1) * (ymax - y1) / (y2 - y1); y = ymax; }
-            else if ((out & BOTTOM) != 0) { x = x1 + (x2 - x1) * (ymin - y1) / (y2 - y1); y = ymin; }
-            else if ((out & RIGHT) != 0)  { y = y1 + (y2 - y1) * (xmax - x1) / (x2 - x1); x = xmax; }
-            else                          { y = y1 + (y2 - y1) * (xmin - x1) / (x2 - x1); x = xmin; }
-            if (out == c1) { x1 = x; y1 = y; c1 = code(x1, y1); }
-            else           { x2 = x; y2 = y; c2 = code(x2, y2); }
-        }
-    }
-
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.setColor(Color.WHITE);
-        g.drawRect(xmin, ymin, xmax - xmin, ymax - ymin);              // clipping window
-        for (int i = 0; i < original.length; i++) {
-            double[] o = original[i];
-            g.setColor(Color.DARK_GRAY);                               // original (faint)
-            g.drawLine((int) o[0], (int) o[1], (int) o[2], (int) o[3]);
-            if (clipped[i] != null) {
-                double[] cl = clipped[i];
-                g.setColor(Color.GREEN);                               // visible part
-                g.drawLine((int) Math.round(cl[0]), (int) Math.round(cl[1]),
-                           (int) Math.round(cl[2]), (int) Math.round(cl[3]));
-            }
-        }
-    }
-
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        CohenSutherland p = new CohenSutherland();
-        p.setBackground(Color.BLACK);
-
-        System.out.println("Window: (" + xmin + "," + ymin + ") to (" + xmax + "," + ymax + ")");
-        System.out.print("How many lines? (0 = use sample lines): ");
-        int n = sc.nextInt();
-        if (n == 0) {
-            p.original = new double[][]{
-                {50, 200, 550, 300},     // crosses window -> clipped both ends
-                {200, 200, 400, 300},    // fully inside -> accepted
-                {50, 50, 120, 100},      // fully outside (top-left) -> rejected
-                {300, 50, 300, 450}      // vertical through window -> clipped
-            };
-        } else {
-            p.original = new double[n][4];
-            for (int i = 0; i < n; i++) {
-                System.out.print("Line " + (i + 1) + " x1 y1 x2 y2: ");
-                for (int j = 0; j < 4; j++) p.original[i][j] = sc.nextDouble();
-            }
-        }
-
-        p.clipped = new double[p.original.length][];
-        for (int i = 0; i < p.original.length; i++) {
-            double[] o = p.original[i];
-            p.clipped[i] = clip(o[0], o[1], o[2], o[3]);
-            System.out.printf("Line %d: codes %4s %4s -> %s%n", i + 1,
-                pad(code(o[0], o[1])), pad(code(o[2], o[3])),
-                p.clipped[i] == null ? "REJECTED" :
-                String.format("(%.1f,%.1f)-(%.1f,%.1f)", p.clipped[i][0], p.clipped[i][1], p.clipped[i][2], p.clipped[i][3]));
-        }
-
-        JFrame f = new JFrame("Cohen-Sutherland Line Clipping");
-        f.add(p);
-        f.setSize(620, 540);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setVisible(true);
-    }
-
-    static String pad(int c) {                    // outcode as 4-bit string TBRL
-        return String.format("%4s", Integer.toBinaryString(c)).replace(' ', '0');
-    }
-}
-```
-
-## Lines
-`unit4-graphics/Lines.java`
-
-```java
-// Lab B1: DDA line (two rectangles: dotted + thick) and Bresenham line (diamond: dashed + solid)
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-
-public class Lines extends JPanel {
-    static final int W = 600, H = 500;
-    BufferedImage img = new BufferedImage(W, H, BufferedImage.TYPE_INT_RGB);
-    int color = Color.WHITE.getRGB();
-
-    void plot(int x, int y) {                                  // putpixel
-        if (x >= 0 && x < W && y >= 0 && y < H) img.setRGB(x, y, color);
-    }
-
-    // style: 0 = solid, 1 = dotted, 2 = dashed, 3 = thick
-    void plotStyled(int x, int y, int i, int style) {
-        if (style == 1 && i % 4 != 0) return;
-        if (style == 2 && i % 12 >= 8) return;
-        plot(x, y);
-        if (style == 3) { plot(x + 1, y); plot(x, y + 1); plot(x + 1, y + 1); }
-    }
-
-    void ddaLine(int x1, int y1, int x2, int y2, int style) {
-        int dx = x2 - x1, dy = y2 - y1;
-        int steps = Math.max(Math.abs(dx), Math.abs(dy));
-        if (steps == 0) { plot(x1, y1); return; }
-        double xinc = (double) dx / steps, yinc = (double) dy / steps;
-        double x = x1, y = y1;
-        for (int i = 0; i <= steps; i++) {
-            plotStyled((int) Math.round(x), (int) Math.round(y), i, style);
-            x += xinc;
-            y += yinc;
-        }
-    }
-
-    // Bresenham for all slopes/directions (integer arithmetic only)
-    void bresLine(int x1, int y1, int x2, int y2, int style) {
-        int dx = Math.abs(x2 - x1), dy = Math.abs(y2 - y1);
-        int sx = (x1 < x2) ? 1 : -1, sy = (y1 < y2) ? 1 : -1;
-        int err = dx - dy, i = 0;
-        while (true) {
-            plotStyled(x1, y1, i++, style);
-            if (x1 == x2 && y1 == y2) break;
-            int e2 = 2 * err;
-            if (e2 > -dy) { err -= dy; x1 += sx; }
-            if (e2 <  dx) { err += dx; y1 += sy; }
-        }
-    }
-
-    void ddaRect(int x1, int y1, int x2, int y2, int style) {
-        ddaLine(x1, y1, x2, y1, style); ddaLine(x2, y1, x2, y2, style);
-        ddaLine(x2, y2, x1, y2, style); ddaLine(x1, y2, x1, y1, style);
-    }
-
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(img, 0, 0, null);
-    }
-
-    public static void main(String[] args) {
-        Lines c = new Lines();
-
-        c.color = Color.CYAN.getRGB();
-        c.ddaRect(100, 100, 500, 400, 1);      // outer rectangle - DDA dotted
-        c.ddaRect(150, 150, 450, 350, 3);      // inner rectangle - DDA thick
-
-        c.color = Color.YELLOW.getRGB();       // diamond through midpoints of outer rectangle
-        c.bresLine(300, 100, 500, 250, 2);     // Bresenham dashed
-        c.bresLine(500, 250, 300, 400, 2);
-        c.bresLine(300, 400, 100, 250, 0);     // Bresenham solid
-        c.bresLine(100, 250, 300, 100, 0);
-
-        JFrame f = new JFrame("DDA & Bresenham Lines");
-        f.add(c);
-        f.setSize(W + 20, H + 40);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setVisible(true);
-    }
-}
-```
-
 ## PolygonFill
-`unit4-graphics/PolygonFill.java`
+**Lab B3: Concave polygon: scan-line, flood and seed fill**  
+File: `unit4-graphics/PolygonFill.java` · Run: `javac PolygonFill.java` → `java PolygonFill`
 
 ```java
 // Lab B3: Concave polygon filled using Scan-line fill, Flood fill, Seed (boundary) fill
@@ -1233,7 +785,8 @@ public class PolygonFill extends JPanel {
 ```
 
 ## SutherlandHodgeman
-`unit4-graphics/SutherlandHodgeman.java`
+**Lab B4: Sutherland-Hodgeman polygon clipping, vertices entered interactively**  
+File: `unit4-graphics/SutherlandHodgeman.java` · Run: `javac SutherlandHodgeman.java` → `java SutherlandHodgeman`
 
 ```java
 // Lab B4: Sutherland-Hodgeman polygon clipping (vertices entered interactively)
@@ -1340,8 +893,113 @@ public class SutherlandHodgeman extends JPanel {
 }
 ```
 
+## CohenSutherland
+**Lab B5: Cohen-Sutherland line clipping**  
+File: `unit4-graphics/CohenSutherland.java` · Run: `javac CohenSutherland.java` → `java CohenSutherland`
+
+```java
+// Lab B5: Cohen-Sutherland line clipping (outcodes TBRL)
+import javax.swing.*;
+import java.awt.*;
+import java.util.Scanner;
+
+public class CohenSutherland extends JPanel {
+    static final int INSIDE = 0, LEFT = 1, RIGHT = 2, BOTTOM = 4, TOP = 8;
+    static int xmin = 150, ymin = 150, xmax = 450, ymax = 350;
+
+    double[][] original;           // lines before clipping {x1,y1,x2,y2}
+    double[][] clipped;            // after clipping (null = rejected)
+
+    static int code(double x, double y) {
+        int c = INSIDE;
+        if (x < xmin) c |= LEFT;   else if (x > xmax) c |= RIGHT;
+        if (y < ymin) c |= BOTTOM; else if (y > ymax) c |= TOP;
+        return c;
+    }
+
+    // returns clipped line or null if rejected
+    static double[] clip(double x1, double y1, double x2, double y2) {
+        int c1 = code(x1, y1), c2 = code(x2, y2);
+        while (true) {
+            if ((c1 | c2) == 0) return new double[]{x1, y1, x2, y2};   // trivially accept
+            if ((c1 & c2) != 0) return null;                           // trivially reject
+            int out = (c1 != 0) ? c1 : c2;
+            double x, y;
+            if ((out & TOP) != 0)         { x = x1 + (x2 - x1) * (ymax - y1) / (y2 - y1); y = ymax; }
+            else if ((out & BOTTOM) != 0) { x = x1 + (x2 - x1) * (ymin - y1) / (y2 - y1); y = ymin; }
+            else if ((out & RIGHT) != 0)  { y = y1 + (y2 - y1) * (xmax - x1) / (x2 - x1); x = xmax; }
+            else                          { y = y1 + (y2 - y1) * (xmin - x1) / (x2 - x1); x = xmin; }
+            if (out == c1) { x1 = x; y1 = y; c1 = code(x1, y1); }
+            else           { x2 = x; y2 = y; c2 = code(x2, y2); }
+        }
+    }
+
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.setColor(Color.WHITE);
+        g.drawRect(xmin, ymin, xmax - xmin, ymax - ymin);              // clipping window
+        for (int i = 0; i < original.length; i++) {
+            double[] o = original[i];
+            g.setColor(Color.DARK_GRAY);                               // original (faint)
+            g.drawLine((int) o[0], (int) o[1], (int) o[2], (int) o[3]);
+            if (clipped[i] != null) {
+                double[] cl = clipped[i];
+                g.setColor(Color.GREEN);                               // visible part
+                g.drawLine((int) Math.round(cl[0]), (int) Math.round(cl[1]),
+                           (int) Math.round(cl[2]), (int) Math.round(cl[3]));
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        CohenSutherland p = new CohenSutherland();
+        p.setBackground(Color.BLACK);
+
+        System.out.println("Window: (" + xmin + "," + ymin + ") to (" + xmax + "," + ymax + ")");
+        System.out.print("How many lines? (0 = use sample lines): ");
+        int n = sc.nextInt();
+        if (n == 0) {
+            p.original = new double[][]{
+                {50, 200, 550, 300},     // crosses window -> clipped both ends
+                {200, 200, 400, 300},    // fully inside -> accepted
+                {50, 50, 120, 100},      // fully outside (top-left) -> rejected
+                {300, 50, 300, 450}      // vertical through window -> clipped
+            };
+        } else {
+            p.original = new double[n][4];
+            for (int i = 0; i < n; i++) {
+                System.out.print("Line " + (i + 1) + " x1 y1 x2 y2: ");
+                for (int j = 0; j < 4; j++) p.original[i][j] = sc.nextDouble();
+            }
+        }
+
+        p.clipped = new double[p.original.length][];
+        for (int i = 0; i < p.original.length; i++) {
+            double[] o = p.original[i];
+            p.clipped[i] = clip(o[0], o[1], o[2], o[3]);
+            System.out.printf("Line %d: codes %4s %4s -> %s%n", i + 1,
+                pad(code(o[0], o[1])), pad(code(o[2], o[3])),
+                p.clipped[i] == null ? "REJECTED" :
+                String.format("(%.1f,%.1f)-(%.1f,%.1f)", p.clipped[i][0], p.clipped[i][1], p.clipped[i][2], p.clipped[i][3]));
+        }
+
+        JFrame f = new JFrame("Cohen-Sutherland Line Clipping");
+        f.add(p);
+        f.setSize(620, 540);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setVisible(true);
+    }
+
+    static String pad(int c) {                    // outcode as 4-bit string TBRL
+        return String.format("%4s", Integer.toBinaryString(c)).replace(' ', '0');
+    }
+}
+```
+
 ## Transform2D
-`unit5-transforms/Transform2D.java`
+**Lab B6, B7, B8: 2D translate / rotate / scale / shear / reflect; triangle & rhombus; rotation about arbitrary point**  
+File: `unit5-transforms/Transform2D.java` · Run: `javac Transform2D.java` → `java Transform2D`
 
 ```java
 // Labs B6, B7, B8: 2D transformations with 3x3 homogeneous matrices
@@ -1460,8 +1118,393 @@ public class Transform2D extends JPanel {
 }
 ```
 
+---
+
+# Extra practice (not on the lab list)
+
+## Basics
+**Data types, operators, if/else, switch, loops**  
+File: `unit1-basics/Basics.java` · Run: `javac Basics.java` → `java Basics`
+
+```java
+// Unit 1 syntax in one runnable file: data types, casting, operators, if/else, switch, all loops
+import java.util.Scanner;
+
+public class Basics {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // ---- data types + casting ----
+        int i = 10;
+        double d = i;              // widening (automatic)
+        double pi = 9.7;
+        int cut = (int) pi;        // narrowing (manual) -> 9
+        char c = 'A';
+        boolean flag = true;
+        System.out.println(i + " " + d + " " + cut + " " + c + " " + flag);
+
+        // ---- operators ----
+        int x = 10, y = 3;
+        System.out.println("x/y = " + (x / y));                 // 3 (integer division)
+        System.out.println("x%y = " + (x % y));                 // 1
+        System.out.println("(double)x/y = " + ((double) x / y));
+        System.out.println("max = " + ((x > y) ? x : y));       // ternary
+        int a = 5;
+        System.out.println(a++ + " " + a);                      // 5 6 (post-increment)
+        System.out.println(++a + " " + a);                      // 7 7 (pre-increment)
+
+        // ---- if / else-if ----
+        System.out.print("Enter marks: ");
+        int marks = sc.nextInt();
+        if (marks >= 75) System.out.println("Distinction");
+        else if (marks >= 40) System.out.println("Pass");
+        else System.out.println("Fail");
+
+        // ---- switch ----
+        System.out.print("Enter day number (1-3): ");
+        switch (sc.nextInt()) {
+            case 1: System.out.println("Monday"); break;
+            case 2: System.out.println("Tuesday"); break;
+            case 3: System.out.println("Wednesday"); break;
+            default: System.out.println("Invalid");
+        }
+
+        // ---- loops ----
+        for (int k = 1; k <= 5; k++) System.out.print(k + " ");
+        System.out.println();
+
+        int n = 5;
+        while (n > 0) { System.out.print(n + " "); n--; }
+        System.out.println();
+
+        int m = 10;
+        do { System.out.println("do-while runs at least once, m = " + m); } while (m < 5);
+
+        int[] arr = {4, 8, 15, 16, 23, 42};
+        int sum = 0;
+        for (int v : arr) sum += v;                              // for-each
+        System.out.println("Sum = " + sum);
+
+        // break and continue
+        for (int k = 1; k <= 10; k++) {
+            if (k % 2 == 0) continue;      // skip even
+            if (k > 7) break;              // stop after 7
+            System.out.print(k + " ");     // 1 3 5 7
+        }
+        System.out.println();
+        sc.close();
+    }
+}
+```
+
+## ArrayStats
+**Array input: sum, largest, even count**  
+File: `unit1-basics/ArrayStats.java` · Run: `javac ArrayStats.java` → `java ArrayStats`
+
+```java
+// Practice: read n numbers, print sum, largest, and count of even numbers
+import java.util.Scanner;
+
+public class ArrayStats {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("How many numbers? ");
+        int n = sc.nextInt();
+        int[] a = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter number " + (i + 1) + ": ");
+            a[i] = sc.nextInt();
+        }
+
+        int sum = 0, max = a[0], even = 0;
+        for (int v : a) {
+            sum += v;
+            if (v > max) max = v;
+            if (v % 2 == 0) even++;
+        }
+
+        System.out.println("Sum = " + sum);
+        System.out.println("Largest = " + max);
+        System.out.println("Even count = " + even);
+        sc.close();
+    }
+}
+```
+
+## StudentDemo
+**Class, constructors, this, static, overloading, array of objects**  
+File: `unit2-classes/StudentDemo.java` · Run: `javac StudentDemo.java` → `java StudentDemo`
+
+```java
+// Unit 2: class, fields, constructors (default/parameterized/copy), this, static,
+// getters/setters, object as parameter, returning object, overloading, array of objects
+class Student {
+    private int roll;
+    private String name;
+    private double marks;
+    static int count = 0;              // shared by all objects
+
+    Student() {                        // default constructor
+        this(0, "Unknown", 0);         // constructor chaining, must be first line
+    }
+
+    Student(int roll, String name, double marks) {   // parameterized
+        this.roll = roll;
+        this.name = name;
+        this.marks = marks;
+        count++;
+    }
+
+    Student(Student s) {               // copy constructor (written by hand in Java)
+        this(s.roll, s.name, s.marks);
+    }
+
+    public String getName() { return name; }
+    public double getMarks() { return marks; }
+    public void setMarks(double m) {
+        if (m >= 0 && m <= 100) marks = m;
+        else System.out.println("Invalid marks");
+    }
+
+    Student topper(Student other) {    // object as parameter + returning object
+        return (this.marks >= other.marks) ? this : other;
+    }
+
+    void show() { System.out.println(roll + " " + name + " " + marks); }       // overloading
+    void show(String prefix) { System.out.println(prefix + ": " + name); }
+
+    static int getCount() { return count; }
+}
+
+public class StudentDemo {
+    public static void main(String[] args) {
+        Student s1 = new Student(1, "Ved", 88);
+        Student s2 = new Student(2, "Amit", 92);
+        Student s3 = new Student(s1);
+        Student s4 = new Student();
+
+        s1.topper(s2).show("Topper");
+        s3.setMarks(150);                      // Invalid marks
+        s4.show();
+        System.out.println("Objects: " + Student.getCount());
+
+        Student[] list = { s1, s2, s3 };       // array of objects
+        for (Student s : list) s.show();
+
+        Student r = s1;                        // same object, two references
+        r.setMarks(50);
+        System.out.println("s1 marks now: " + s1.getMarks());   // 50.0
+    }
+}
+```
+
+## ArgsAndIO
+**Varargs, command-line args, BufferedReader**  
+File: `unit2-classes/ArgsAndIO.java` · Run: `javac ArgsAndIO.java` → `java ArgsAndIO`
+
+```java
+// Unit 2 extras: passing arrays, varargs, command-line args, BufferedReader, PrintWriter
+// Run: java ArgsAndIO 10 20
+import java.io.*;
+
+public class ArgsAndIO {
+    static void doubleAll(int[] a) {             // array passed by reference value -> original changes
+        for (int i = 0; i < a.length; i++) a[i] *= 2;
+    }
+
+    static int sum(int... nums) {                // varargs: nums is an int[]
+        int s = 0;
+        for (int x : nums) s += x;
+        return s;
+    }
+
+    public static void main(String[] args) throws IOException {
+        // command-line arguments are always Strings
+        if (args.length >= 2) {
+            int a = Integer.parseInt(args[0]);
+            int b = Integer.parseInt(args[1]);
+            System.out.println("Args sum = " + (a + b));
+        } else {
+            System.out.println("Tip: run as  java ArgsAndIO 10 20");
+        }
+
+        int[] arr = {1, 2, 3};
+        doubleAll(arr);
+        System.out.println("After doubleAll: " + arr[0] + " " + arr[1] + " " + arr[2]);
+        System.out.println("sum(1,2) = " + sum(1, 2) + ", sum(4,5,6) = " + sum(4, 5, 6));
+
+        // BufferedReader: reads Strings only, so parse them
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        System.out.print("Enter your name: ");
+        String name = br.readLine();
+        System.out.print("Enter your age: ");
+        int age = Integer.parseInt(br.readLine().trim());
+
+        // PrintWriter: character output stream, true = auto-flush
+        PrintWriter pw = new PrintWriter(System.out, true);
+        pw.println("Hello " + name + ", next year you will be " + (age + 1));
+    }
+}
+```
+
+## ShapesAbstract
+**Abstract class, dynamic binding**  
+File: `unit3-oop/ShapesAbstract.java` · Run: `javac ShapesAbstract.java` → `java ShapesAbstract`
+
+```java
+// Unit 3: abstract class, abstract method, dynamic binding (runtime polymorphism), final, toString
+abstract class Shape {
+    final String unit = "sq units";            // final variable = constant
+
+    abstract double area();                    // no body
+
+    void display() {                           // concrete method
+        System.out.println(getClass().getSimpleName() + " area = " + String.format("%.2f", area()) + " " + unit);
+    }
+}
+
+class Circle extends Shape {
+    double r;
+    Circle(double r) { this.r = r; }
+    double area() { return Math.PI * r * r; }
+    @Override public String toString() { return "Circle(r=" + r + ")"; }   // from Object class
+}
+
+class Rect extends Shape {
+    double l, b;
+    Rect(double l, double b) { this.l = l; this.b = b; }
+    double area() { return l * b; }
+}
+
+final class Square extends Rect {              // final class: cannot be extended
+    Square(double s) { super(s, s); }
+}
+
+public class ShapesAbstract {
+    public static void main(String[] args) {
+        Shape[] shapes = { new Circle(2), new Rect(3, 4), new Square(5) };
+        for (Shape s : shapes) s.display();    // same call, different behaviour
+
+        Shape s = new Circle(1);               // parent reference, child object
+        System.out.println(s);                 // calls Circle's toString()
+        // Shape x = new Shape();              // ERROR: abstract class cannot be instantiated
+    }
+}
+```
+
+## ExceptionDemo
+**Built-in exceptions, nested try, throws, custom exception**  
+File: `unit3-oop/ExceptionDemo.java` · Run: `javac ExceptionDemo.java` → `java ExceptionDemo`
+
+```java
+// Unit 3: built-in exceptions, multiple catch, nested try, throw vs throws, custom exception
+class InsufficientFundsException extends Exception {        // custom CHECKED exception
+    InsufficientFundsException(String msg) { super(msg); }
+}
+
+public class ExceptionDemo {
+
+    // throws: declares that this method may throw a checked exception
+    static void withdraw(double bal, double amt) throws InsufficientFundsException {
+        if (amt > bal) throw new InsufficientFundsException("Need " + (amt - bal) + " more");
+        System.out.println("Withdrawn " + amt);
+    }
+
+    public static void main(String[] args) {
+        // 1. multiple catch: specific first, general last
+        try {
+            int[] a = new int[3];
+            a[5] = 10 / 2;
+        } catch (ArithmeticException e) {
+            System.out.println("Arithmetic: " + e.getMessage());
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Array index: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("General: " + e);
+        } finally {
+            System.out.println("finally always runs");
+        }
+
+        // 2. nested try: inner catch doesn't match, outer one handles it
+        try {
+            try {
+                int x = 10 / 0;
+            } catch (NullPointerException e) {
+                System.out.println("Inner caught NPE");
+            }
+        } catch (ArithmeticException e) {
+            System.out.println("Outer caught: " + e.getMessage());
+        }
+
+        // 3. NumberFormatException
+        try {
+            int n = Integer.parseInt("abc");
+        } catch (NumberFormatException e) {
+            System.out.println("Bad number format");
+        }
+
+        // 4. NullPointerException
+        try {
+            String s = null;
+            System.out.println(s.length());
+        } catch (NullPointerException e) {
+            System.out.println("Null reference used");
+        }
+
+        // 5. custom checked exception: must be caught or declared
+        try {
+            withdraw(1000, 500);
+            withdraw(1000, 1500);
+        } catch (InsufficientFundsException e) {
+            System.out.println("Custom: " + e.getMessage());
+        }
+    }
+}
+```
+
+## ThreadBasics
+**Threads, Runnable, synchronized**  
+File: `unit3-oop/ThreadBasics.java` · Run: `javac ThreadBasics.java` → `java ThreadBasics`
+
+```java
+// Unit 3: main thread, Runnable, multiple threads, synchronized
+class Counter {
+    int count = 0;
+    synchronized void inc() { count++; }        // only one thread at a time
+}
+
+class Task implements Runnable {                // Runnable = preferred way (class can still extend another)
+    private Counter counter;
+    Task(Counter counter) { this.counter = counter; }
+
+    public void run() {
+        for (int i = 0; i < 1000; i++) counter.inc();
+        System.out.println(Thread.currentThread().getName() + " finished");
+    }
+}
+
+public class ThreadBasics {
+    public static void main(String[] args) throws InterruptedException {
+        Thread main = Thread.currentThread();
+        System.out.println("Main thread: " + main.getName() + ", priority " + main.getPriority());
+
+        Counter c = new Counter();
+        Thread t1 = new Thread(new Task(c), "Worker-1");
+        Thread t2 = new Thread(new Task(c), "Worker-2");
+        Thread t3 = new Thread(new Task(c), "Worker-3");
+
+        t1.start(); t2.start(); t3.start();     // start() -> new thread -> run()
+        t1.join(); t2.join(); t3.join();
+
+        System.out.println("Final count = " + c.count + " (always 3000 thanks to synchronized)");
+    }
+}
+```
+
 ## Transform3D
-`unit5-transforms/Transform3D.java`
+**3D translate / scale / rotate (cube)**  
+File: `unit5-transforms/Transform3D.java` · Run: `javac Transform3D.java` → `java Transform3D`
 
 ```java
 // Unit 5: 3D transformations with 4x4 homogeneous matrices (console output, no window)
@@ -1521,4 +1564,3 @@ public class Transform3D {
     }
 }
 ```
-
