@@ -1,1566 +1,2716 @@
-# All OOPCG Java code in one file
+# All DS Python code in one file
 
-Ordered by **syllabus lab number** (SPPU 2024 pattern, PCC-205-COM).
-To use one: copy the code block into a file named exactly like the class (e.g. `ATM.java`), then `javac ATM.java` and `java ATM`.
+Practicals first, then basics and each syllabus unit. Copy a block into a `.py` file and run `python3 file.py`.
 
 ## Index
 
-**Group A – Java OOP**
+**Practical exam programs**
 
-- A1 – [Calculator](#calculator) – Calculator with user input, conditions, loops and error handling
-- A2 – [Order](#order) – E-commerce order: overloaded constructors, user input, discount, invoice
-- A3 – [Hotel](#hotel) – Hotel room booking with a 2D array: view, book, exit
-- A4 – [SingleInheritance](#singleinheritance) – Single inheritance: subclass extends superclass and calls its methods
-- A5 – [MultipleInterface](#multipleinterface) – Multiple inheritance using interfaces, polymorphism
-- A6 – [ATM](#atm) – ATM: try/catch/finally, ArithmeticException (insufficient funds), IllegalArgumentException (invalid input)
-- A7 – [Chat](#chat) – Multithreaded chat: isAlive(), join(), priorities, suspend/resume/stop
+- [GA1 – Library borrowing records](#ga1--library-borrowing-records)
+- [GA2 – Customer ID linear and binary search](#ga2--customer-id-linear-and-binary-search)
+- [GA3 – Salary selection and bubble sort, top 5](#ga3--salary-selection-and-bubble-sort-top-5)
+- [GB4 – Undo/redo with stacks](#gb4--undoredo-with-stacks)
+- [GB5 – Event processing queue](#gb5--event-processing-queue)
+- [GB6 – Student records with a linked list](#gb6--student-records-with-a-linked-list)
+- [GC7 – Hash table with chaining](#gc7--hash-table-with-chaining)
+- [GC8 – Hash table with linear probing](#gc8--hash-table-with-linear-probing)
+- [GD9 – City graph BFS and DFS](#gd9--city-graph-bfs-and-dfs)
+- [GD10 – Binary search tree](#gd10--binary-search-tree)
 
-**Group B – Computer Graphics**
+**Python basics**
 
-- B1 – [Lines](#lines) – DDA rectangles (dotted, thick) + Bresenham diamond (dashed, solid)
-- B2 – [Circles](#circles) – Menu: DDA / Bresenham / Midpoint circle, solid / dotted / dashed
-- B3 – [PolygonFill](#polygonfill) – Concave polygon: scan-line, flood and seed fill
-- B4 – [SutherlandHodgeman](#sutherlandhodgeman) – Sutherland-Hodgeman polygon clipping, vertices entered interactively
-- B5 – [CohenSutherland](#cohensutherland) – Cohen-Sutherland line clipping
-- B6, B7, B8 – [Transform2D](#transform2d) – 2D translate / rotate / scale / shear / reflect; triangle & rhombus; rotation about arbitrary point
+- [Python basics for DS](#python-basics-for-ds)
 
-**Extra practice (not on the lab list)**
+**Unit I – Complexity, divide and conquer, greedy**
 
-- [Basics](#basics) – Data types, operators, if/else, switch, loops
-- [ArrayStats](#arraystats) – Array input: sum, largest, even count
-- [StudentDemo](#studentdemo) – Class, constructors, this, static, overloading, array of objects
-- [ArgsAndIO](#argsandio) – Varargs, command-line args, BufferedReader
-- [ShapesAbstract](#shapesabstract) – Abstract class, dynamic binding
-- [ExceptionDemo](#exceptiondemo) – Built-in exceptions, nested try, throws, custom exception
-- [ThreadBasics](#threadbasics) – Threads, Runnable, synchronized
-- [Transform3D](#transform3d) – 3D translate / scale / rotate (cube)
+- [Step count method](#step-count-method)
+- [Divide and conquer – product sorting](#divide-and-conquer--product-sorting)
+- [Greedy – calendar scheduling](#greedy--calendar-scheduling)
+
+**Unit II – Arrays, searching, sorting**
+
+- [Arrays and matrices](#arrays-and-matrices)
+- [Searching](#searching)
+- [Sorting](#sorting)
+
+**Unit III – Stacks, queues, linked lists**
+
+- [Stack and expressions](#stack-and-expressions)
+- [Queues](#queues)
+- [Call center queue (lab B3)](#call-center-queue-lab-b3)
+- [Linked lists (singly, doubly, circular)](#linked-lists-singly-doubly-circular)
+- [Stack and queue using a linked list](#stack-and-queue-using-a-linked-list)
+
+**Unit IV – Hashing**
+
+- [Extendible hashing (lab C3)](#extendible-hashing-lab-c3)
+- [Dictionary with hashing and rehashing](#dictionary-with-hashing-and-rehashing)
+
+**Unit V – Graphs and trees**
+
+- [Prim, Kruskal, Dijkstra (lab D2)](#prim-kruskal-dijkstra-lab-d2)
+- [Binary tree traversals](#binary-tree-traversals)
+- [Expression tree from prefix (lab D4)](#expression-tree-from-prefix-lab-d4)
+- [City population BST (lab D5)](#city-population-bst-lab-d5)
+- [Propositional formula tree (lab D6)](#propositional-formula-tree-lab-d6)
+- [Huffman coding](#huffman-coding)
 
 ---
 
-# Group A – Java OOP
+# Practical exam programs
 
-## Calculator
-**Lab A1: Calculator with user input, conditions, loops and error handling**  
-File: `unit1-basics/Calculator.java` · Run: `javac Calculator.java` → `java Calculator`
+## GA1 – Library borrowing records
+File: `practicals/GA1_library_borrowing.py`
 
-```java
-// Lab A1: Menu-driven calculator (Unit 1: Scanner input, switch, do-while, break/continue)
-import java.util.Scanner;
+```python
+# GA1: Library borrowing records
+# Average, highest/lowest, members with 0 borrows, mode (most frequent borrow count)
+# Every operation is written with plain loops (no max/min/sum) so you can explain it.
 
-public class Calculator {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int choice;
+def average(counts):
+    total = 0
+    for c in counts:                 # one pass over n members
+        total += c
+    return total / len(counts)       # Time O(n), Space O(1)
 
-        do {
-            System.out.println("\n1.Add 2.Sub 3.Mul 4.Div 5.Mod 0.Exit");
-            System.out.print("Enter choice: ");
-            choice = sc.nextInt();
 
-            if (choice == 0) break;
-            if (choice < 0 || choice > 5) {
-                System.out.println("Invalid choice");
-                continue;
-            }
+def highest_lowest(names, counts):
+    hi = lo = 0                      # index of highest and lowest so far
+    for i in range(1, len(counts)):
+        if counts[i] > counts[hi]:
+            hi = i
+        if counts[i] < counts[lo]:
+            lo = i
+    return names[hi], counts[hi], names[lo], counts[lo]   # Time O(n), Space O(1)
 
-            System.out.print("Enter two numbers: ");
-            double a = sc.nextDouble();
-            double b = sc.nextDouble();
 
-            switch (choice) {
-                case 1: System.out.println("Result = " + (a + b)); break;
-                case 2: System.out.println("Result = " + (a - b)); break;
-                case 3: System.out.println("Result = " + (a * b)); break;
-                case 4:
-                    if (b == 0) System.out.println("Error: divide by zero");
-                    else System.out.println("Result = " + (a / b));
-                    break;
-                case 5:
-                    if (b == 0) System.out.println("Error: divide by zero");
-                    else System.out.println("Result = " + (a % b));
-                    break;
-            }
-        } while (true);
+def count_zero(counts):
+    zero = 0
+    for c in counts:
+        if c == 0:
+            zero += 1
+    return zero                      # Time O(n), Space O(1)
 
-        System.out.println("Bye!");
-        sc.close();
-    }
-}
+
+def mode(counts):
+    freq = {}                        # borrow count -> how many times it appears
+    for c in counts:
+        freq[c] = freq.get(c, 0) + 1
+    best = counts[0]
+    for c in freq:
+        if freq[c] > freq[best]:
+            best = c
+    return best, freq[best]          # Time O(n), Space O(k), k = distinct counts
+
+
+n = int(input("Number of members: "))
+names = []
+counts = []
+for i in range(n):
+    name = input(f"Member {i + 1} name: ")
+    c = int(input(f"Books borrowed by {name}: "))
+    names.append(name)
+    counts.append(c)
+
+while True:
+    print("\n1.Average  2.Highest & Lowest  3.Members with 0 books  4.Mode  5.Complexity  6.Exit")
+    ch = int(input("Choice: "))
+    if ch == 1:
+        print("Average books borrowed =", round(average(counts), 2))
+    elif ch == 2:
+        hn, hc, ln, lc = highest_lowest(names, counts)
+        print(f"Highest: {hn} ({hc} books)   Lowest: {ln} ({lc} books)")
+    elif ch == 3:
+        print("Members who borrowed 0 books =", count_zero(counts))
+    elif ch == 4:
+        m, f = mode(counts)
+        print(f"Most frequent borrow count = {m} (appears {f} times)")
+    elif ch == 5:
+        print("Average        : Time O(n)  Space O(1)")
+        print("Highest/Lowest : Time O(n)  Space O(1)")
+        print("Count zero     : Time O(n)  Space O(1)")
+        print("Mode           : Time O(n)  Space O(k)  (dictionary of k distinct counts)")
+    elif ch == 6:
+        break
+    else:
+        print("Invalid choice")
 ```
 
-## Order
-**Lab A2: E-commerce order: overloaded constructors, user input, discount, invoice**  
-File: `unit2-classes/Order.java` · Run: `javac Order.java` → `java Order`
+## GA2 – Customer ID linear and binary search
+File: `practicals/GA2_customer_search.py`
 
-```java
-// Lab A2: E-commerce order processing with overloaded constructors, discount, invoice
-import java.util.Scanner;
+```python
+# GA2: Customer account IDs - Linear search and Binary search
 
-class Product {
-    String name;
-    double price;
-    int qty;
+def linear_search(ids, key):
+    for i in range(len(ids)):        # check every element one by one
+        if ids[i] == key:
+            return i
+    return -1                        # Time O(n)
 
-    Product() { this("Sample", 0, 0); }
-    Product(String name, double price) { this(name, price, 1); }   // qty defaults to 1
-    Product(String name, double price, int qty) {
-        this.name = name;
-        this.price = price;
-        this.qty = qty;
-    }
 
-    double total() { return price * qty; }
-}
+def binary_search(ids, key):         # list MUST be sorted
+    low, high = 0, len(ids) - 1
+    while low <= high:
+        mid = (low + high) // 2
+        if ids[mid] == key:
+            return mid
+        elif key < ids[mid]:
+            high = mid - 1           # search left half
+        else:
+            low = mid + 1            # search right half
+    return -1                        # Time O(log n)
 
-public class Order {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
 
-        Product[] cart = new Product[10];
-        cart[0] = new Product("Pen", 20);           // 2-arg constructor
-        cart[1] = new Product("Notebook", 60, 3);   // 3-arg constructor
-        int n = 2;
+def binary_search_rec(ids, key, low, high):
+    if low > high:
+        return -1
+    mid = (low + high) // 2
+    if ids[mid] == key:
+        return mid
+    if key < ids[mid]:
+        return binary_search_rec(ids, key, low, mid - 1)
+    return binary_search_rec(ids, key, mid + 1, high)
 
-        System.out.print("How many more products? ");
-        int extra = sc.nextInt();
-        for (int i = 0; i < extra && n < cart.length; i++) {
-            System.out.print("Name Price Qty: ");
-            cart[n++] = new Product(sc.next(), sc.nextDouble(), sc.nextInt());
-        }
 
-        double sum = 0;
-        System.out.println("\n------- INVOICE -------");
-        for (int i = 0; i < n; i++) {
-            Product p = cart[i];
-            System.out.printf("%-10s %3d x %8.2f = %9.2f%n", p.name, p.qty, p.price, p.total());
-            sum += p.total();
-        }
+ids = list(map(int, input("Enter customer IDs separated by space: ").split()))
 
-        double disc;
-        if (sum > 5000) disc = 0.10;
-        else if (sum > 2000) disc = 0.05;
-        else disc = 0;
-
-        System.out.println("-----------------------");
-        System.out.printf("Subtotal : %.2f%n", sum);
-        System.out.printf("Discount : %.2f (%.0f%%)%n", sum * disc, disc * 100);
-        System.out.printf("Total    : %.2f%n", sum - sum * disc);
-        sc.close();
-    }
-}
+while True:
+    print("\n1.Linear Search  2.Binary Search  3.Binary Search (recursive)  4.Display  5.Exit")
+    ch = int(input("Choice: "))
+    if ch == 1:
+        key = int(input("ID to search: "))
+        pos = linear_search(ids, key)
+        print(f"Found at index {pos}" if pos != -1 else "ID not found")
+    elif ch in (2, 3):
+        key = int(input("ID to search: "))
+        s = sorted(ids)
+        print("Sorted IDs:", s)
+        if ch == 2:
+            pos = binary_search(s, key)
+        else:
+            pos = binary_search_rec(s, key, 0, len(s) - 1)
+        print(f"Found at index {pos} of sorted list" if pos != -1 else "ID not found")
+    elif ch == 4:
+        print("Customer IDs:", ids)
+    elif ch == 5:
+        break
+    else:
+        print("Invalid choice")
 ```
 
-## Hotel
-**Lab A3: Hotel room booking with a 2D array: view, book, exit**  
-File: `unit2-classes/Hotel.java` · Run: `javac Hotel.java` → `java Hotel`
+## GA3 – Salary selection and bubble sort, top 5
+File: `practicals/GA3_salary_sort.py`
 
-```java
-// Lab A3: Hotel room booking using a 2D array (floors x rooms)
-import java.util.Scanner;
+```python
+# GA3: Sort employee salaries (float) with Selection sort and Bubble sort, show top 5
 
-public class Hotel {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int[][] rooms = new int[3][4];      // 0 = free, 1 = booked
-        int ch;
+def selection_sort(a):
+    a = a[:]                                  # work on a copy
+    n = len(a)
+    for i in range(n - 1):
+        mn = i
+        for j in range(i + 1, n):             # find smallest in unsorted part
+            if a[j] < a[mn]:
+                mn = j
+        a[i], a[mn] = a[mn], a[i]             # put it at position i
+    return a                                  # Time O(n^2), Space O(1)
 
-        do {
-            System.out.println("\n1.View 2.Book 3.Cancel 0.Exit");
-            ch = sc.nextInt();
-            switch (ch) {
-                case 1:
-                    for (int f = 0; f < rooms.length; f++) {
-                        System.out.print("Floor " + (f + 1) + ": ");
-                        for (int r = 0; r < rooms[f].length; r++)
-                            System.out.print(rooms[f][r] == 0 ? "[ ] " : "[X] ");
-                        System.out.println();
-                    }
-                    break;
-                case 2:
-                case 3: {
-                    System.out.print("Floor (1-3) and Room (1-4): ");
-                    int f = sc.nextInt() - 1, r = sc.nextInt() - 1;
-                    if (f < 0 || f >= rooms.length || r < 0 || r >= rooms[0].length)
-                        System.out.println("Invalid room");
-                    else if (ch == 2 && rooms[f][r] == 1)
-                        System.out.println("Already booked");
-                    else if (ch == 3 && rooms[f][r] == 0)
-                        System.out.println("Room is not booked");
-                    else {
-                        rooms[f][r] = (ch == 2) ? 1 : 0;
-                        System.out.println(ch == 2 ? "Booked!" : "Cancelled!");
-                    }
-                    break;
-                }
-                case 0:
-                    System.out.println("Thank you!");
-                    break;
-                default:
-                    System.out.println("Invalid choice");
-            }
-        } while (ch != 0);
-        sc.close();
-    }
-}
+
+def bubble_sort(a):
+    a = a[:]
+    n = len(a)
+    for i in range(n - 1):
+        swapped = False
+        for j in range(n - 1 - i):            # largest bubbles to the end
+            if a[j] > a[j + 1]:
+                a[j], a[j + 1] = a[j + 1], a[j]
+                swapped = True
+        if not swapped:                       # already sorted -> stop early
+            break
+    return a                                  # Time O(n^2), best O(n)
+
+
+def top_five(sorted_list):
+    top = []
+    for i in range(len(sorted_list) - 1, -1, -1):   # walk from the end
+        top.append(sorted_list[i])
+        if len(top) == 5:
+            break
+    return top
+
+
+salaries = list(map(float, input("Enter salaries separated by space: ").split()))
+
+while True:
+    print("\n1.Selection Sort  2.Bubble Sort  3.Exit")
+    ch = int(input("Choice: "))
+    if ch == 1:
+        s = selection_sort(salaries)
+    elif ch == 2:
+        s = bubble_sort(salaries)
+    elif ch == 3:
+        break
+    else:
+        print("Invalid choice")
+        continue
+    print("Sorted (ascending):", s)
+    print("Top 5 salaries    :", top_five(s))
 ```
 
-## SingleInheritance
-**Lab A4: Single inheritance: subclass extends superclass and calls its methods**  
-File: `unit3-oop/SingleInheritance.java` · Run: `javac SingleInheritance.java` → `java SingleInheritance`
+## GB4 – Undo/redo with stacks
+File: `practicals/GB4_undo_redo_stack.py`
 
-```java
-// Lab A4: Single inheritance, super(), protected, method overriding (+ multilevel bonus)
-class Vehicle {
-    protected String brand;
-    protected int speed;
+```python
+# GB4: Undo / Redo for a text editor using two stacks
 
-    Vehicle(String brand, int speed) {
-        this.brand = brand;
-        this.speed = speed;
-        System.out.println("Vehicle constructor");
-    }
+undo_stack = []      # every change made, latest on top
+redo_stack = []      # changes that were undone, latest on top
 
-    void start() { System.out.println(brand + " starting"); }
-    void info()  { System.out.println("Brand: " + brand + ", Speed: " + speed); }
-}
 
-class Car extends Vehicle {
-    private int doors;
+def make_change(text):
+    undo_stack.append(text)          # push
+    redo_stack.clear()               # a new change kills the redo history
+    print("Change added:", text)
 
-    Car(String brand, int speed, int doors) {
-        super(brand, speed);                 // parent constructor runs first
-        this.doors = doors;
-        System.out.println("Car constructor");
-    }
 
-    @Override
-    void info() {
-        super.info();                        // reuse parent version
-        System.out.println("Doors: " + doors);
-    }
+def undo():
+    if not undo_stack:
+        print("Nothing to undo")
+        return
+    change = undo_stack.pop()        # pop latest change
+    redo_stack.append(change)        # keep it for redo
+    print("Undone:", change)
 
-    void honk() { System.out.println("Beep!"); }
-}
 
-class SportsCar extends Car {                // multilevel: Vehicle -> Car -> SportsCar
-    SportsCar(String brand) {
-        super(brand, 300, 2);
-        System.out.println("SportsCar constructor");
-    }
+def redo():
+    if not redo_stack:
+        print("Nothing to redo")
+        return
+    change = redo_stack.pop()
+    undo_stack.append(change)
+    print("Redone:", change)
 
-    @Override
-    void start() { System.out.println(brand + " roars to life!"); }
-}
 
-public class SingleInheritance {
-    public static void main(String[] args) {
-        Car c = new Car("Honda", 180, 4);
-        c.start();      // inherited
-        c.info();       // overridden
-        c.honk();       // own method
+def display():
+    print("Document:", " ".join(undo_stack) if undo_stack else "(empty)")
+    print("Undo stack:", undo_stack)
+    print("Redo stack:", redo_stack)
 
-        System.out.println("---- multilevel ----");
-        SportsCar s = new SportsCar("Ferrari");
-        s.start();
-        s.info();
-    }
-}
+
+while True:
+    print("\n1.Make Change  2.Undo  3.Redo  4.Display Document  5.Exit")
+    ch = int(input("Choice: "))
+    if ch == 1:
+        make_change(input("Enter text: "))
+    elif ch == 2:
+        undo()
+        display()
+    elif ch == 3:
+        redo()
+        display()
+    elif ch == 4:
+        display()
+    elif ch == 5:
+        break
+    else:
+        print("Invalid choice")
 ```
 
-## MultipleInterface
-**Lab A5: Multiple inheritance using interfaces, polymorphism**  
-File: `unit3-oop/MultipleInterface.java` · Run: `javac MultipleInterface.java` → `java MultipleInterface`
+## GB5 – Event processing queue
+File: `practicals/GB5_event_queue.py`
 
-```java
-// Lab A5: Multiple inheritance using interfaces + polymorphism through interface references
-interface Printable {
-    int MAX_PAGES = 100;                       // public static final by default
-    void print();
-}
+```python
+# GB5: Real-time event processing using a Queue (FIFO)
 
-interface Scannable {
-    void scan();
-}
+class Queue:
+    def __init__(self):
+        self.items = []
 
-class Machine {
-    void powerOn() { System.out.println("Machine powered on"); }
-}
+    def is_empty(self):
+        return len(self.items) == 0
 
-// extends one class AND implements two interfaces
-class Printer extends Machine implements Printable, Scannable {
-    public void print() { System.out.println("Printing document (max " + MAX_PAGES + " pages)"); }
-    public void scan()  { System.out.println("Scanning document"); }
-}
+    def enqueue(self, x):            # add at rear
+        self.items.append(x)
 
-class PhotoCopier implements Printable {
-    public void print() { System.out.println("Photocopying"); }
-}
+    def dequeue(self):               # remove from front (oldest)
+        return self.items.pop(0)
 
-public class MultipleInterface {
-    public static void main(String[] args) {
-        Printer p = new Printer();
-        p.powerOn();
-        p.print();
-        p.scan();
+    def remove(self, x):             # cancel an unprocessed event
+        if x in self.items:
+            self.items.remove(x)
+            return True
+        return False
 
-        // polymorphism: one interface reference, different objects
-        Printable[] devices = { new Printer(), new PhotoCopier() };
-        for (Printable d : devices) d.print();
 
-        Scannable s = p;
-        s.scan();
-        // s.print();  // ERROR: a Scannable reference only sees scan()
-    }
-}
+q = Queue()
+
+while True:
+    print("\n1.Add Event  2.Process Next Event  3.Display Pending  4.Cancel Event  5.Exit")
+    ch = int(input("Choice: "))
+    if ch == 1:
+        e = input("Event name: ")
+        q.enqueue(e)
+        print("Added:", e)
+    elif ch == 2:
+        if q.is_empty():
+            print("No events to process")
+        else:
+            print("Processed:", q.dequeue())
+    elif ch == 3:
+        print("Pending events (front -> rear):", q.items if not q.is_empty() else "none")
+    elif ch == 4:
+        e = input("Event to cancel: ")
+        print("Cancelled:", e if q.remove(e) else "event not found / already processed")
+    elif ch == 5:
+        break
+    else:
+        print("Invalid choice")
 ```
 
-## ATM
-**Lab A6: ATM: try/catch/finally, ArithmeticException (insufficient funds), IllegalArgumentException (invalid input)**  
-File: `unit3-oop/ATM.java` · Run: `javac ATM.java` → `java ATM`
+## GB6 – Student records with a linked list
+File: `practicals/GB6_student_linked_list.py`
 
-```java
-// Lab A6: ATM with exception handling (try, multiple catch, finally, throw)
-// ArithmeticException for insufficient funds, IllegalArgumentException for invalid amount
-import java.util.InputMismatchException;
-import java.util.Scanner;
+```python
+# GB6: Student Record Management System using a Singly Linked List
+# Node stores Roll No, Name, Marks. Add, Delete, Update, Search, Sort, Display asc/desc.
 
-class Account {
-    private double balance;
+class Node:
+    def __init__(self, roll, name, marks):
+        self.roll = roll
+        self.name = name
+        self.marks = marks
+        self.next = None
 
-    Account(double balance) { this.balance = balance; }
 
-    double getBalance() { return balance; }
+class StudentList:
+    def __init__(self):
+        self.head = None
 
-    void deposit(double amt) {
-        if (amt <= 0)
-            throw new IllegalArgumentException("Deposit must be positive");
-        balance += amt;
-    }
+    def search(self, roll):
+        temp = self.head
+        while temp:
+            if temp.roll == roll:
+                return temp
+            temp = temp.next
+        return None
 
-    void withdraw(double amt) {
-        if (amt <= 0)
-            throw new IllegalArgumentException("Withdrawal must be positive");
-        if (amt > balance)
-            throw new ArithmeticException("Insufficient funds");
-        balance -= amt;
-    }
-}
+    def add(self, roll, name, marks):           # insert at end
+        if self.search(roll):
+            print("Roll number already exists")
+            return
+        new = Node(roll, name, marks)
+        if self.head is None:
+            self.head = new
+            return
+        temp = self.head
+        while temp.next:
+            temp = temp.next
+        temp.next = new
 
-public class ATM {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        Account acc = new Account(5000);
-        int ch = -1;
+    def delete(self, roll):
+        if self.head is None:
+            return False
+        if self.head.roll == roll:              # deleting the first node
+            self.head = self.head.next
+            return True
+        prev = self.head
+        while prev.next and prev.next.roll != roll:
+            prev = prev.next
+        if prev.next is None:
+            return False
+        prev.next = prev.next.next              # unlink the node
+        return True
 
-        while (ch != 0) {
-            System.out.println("\n1.Balance 2.Deposit 3.Withdraw 0.Exit");
-            try {
-                ch = sc.nextInt();
-                switch (ch) {
-                    case 1:
-                        System.out.println("Balance: " + acc.getBalance());
-                        break;
-                    case 2:
-                        System.out.print("Amount: ");
-                        acc.deposit(sc.nextDouble());
-                        System.out.println("Deposited. Balance: " + acc.getBalance());
-                        break;
-                    case 3:
-                        System.out.print("Amount: ");
-                        acc.withdraw(sc.nextDouble());
-                        System.out.println("Collect cash. Balance: " + acc.getBalance());
-                        break;
-                    case 0:
-                        System.out.println("Goodbye");
-                        break;
-                    default:
-                        System.out.println("Invalid choice");
-                }
-            } catch (ArithmeticException e) {
-                System.out.println("Error: " + e.getMessage());
-            } catch (IllegalArgumentException e) {
-                System.out.println("Error: " + e.getMessage());
-            } catch (InputMismatchException e) {
-                System.out.println("Error: enter numbers only");
-                sc.next();                       // discard the bad token
-            } finally {
-                System.out.println("-- transaction complete --");
-            }
-        }
-        sc.close();
-    }
-}
+    def update(self, roll, name, marks):
+        node = self.search(roll)
+        if node:
+            node.name = name
+            node.marks = marks
+            return True
+        return False
+
+    def sort(self, key, descending=False):     # bubble sort by swapping node data
+        if self.head is None:
+            return
+        swapped = True
+        while swapped:
+            swapped = False
+            temp = self.head
+            while temp.next:
+                a = getattr(temp, key)
+                b = getattr(temp.next, key)
+                if (a > b and not descending) or (a < b and descending):
+                    temp.roll, temp.next.roll = temp.next.roll, temp.roll
+                    temp.name, temp.next.name = temp.next.name, temp.name
+                    temp.marks, temp.next.marks = temp.next.marks, temp.marks
+                    swapped = True
+                temp = temp.next
+
+    def display(self):
+        if self.head is None:
+            print("No records")
+            return
+        print(f"{'Roll':<6}{'Name':<15}{'Marks':<6}")
+        temp = self.head
+        while temp:
+            print(f"{temp.roll:<6}{temp.name:<15}{temp.marks:<6}")
+            temp = temp.next
+
+
+s = StudentList()
+
+while True:
+    print("\n1.Add  2.Delete  3.Update  4.Search  5.Sort & Display  6.Display  7.Exit")
+    ch = int(input("Choice: "))
+    if ch == 1:
+        r = int(input("Roll No: "))
+        n = input("Name: ")
+        m = float(input("Marks: "))
+        s.add(r, n, m)
+    elif ch == 2:
+        r = int(input("Roll No to delete: "))
+        print("Deleted" if s.delete(r) else "Not found")
+    elif ch == 3:
+        r = int(input("Roll No to update: "))
+        n = input("New name: ")
+        m = float(input("New marks: "))
+        print("Updated" if s.update(r, n, m) else "Not found")
+    elif ch == 4:
+        node = s.search(int(input("Roll No to search: ")))
+        print(f"Found: {node.roll} {node.name} {node.marks}" if node else "Not found")
+    elif ch == 5:
+        k = input("Sort by (roll/marks): ").strip()
+        if k not in ("roll", "marks"):
+            print("Type roll or marks")
+            continue
+        order = input("Order (asc/desc): ").strip()
+        s.sort(k, order == "desc")
+        s.display()
+    elif ch == 6:
+        s.display()
+    elif ch == 7:
+        break
+    else:
+        print("Invalid choice")
 ```
 
-## Chat
-**Lab A7: Multithreaded chat: isAlive(), join(), priorities, suspend/resume/stop**  
-File: `unit3-oop/Chat.java` · Run: `javac Chat.java` → `java Chat`
+## GC7 – Hash table with chaining
+File: `practicals/GC7_hash_chaining.py`
 
-```java
-// Lab A7: Multithreaded chat - isAlive(), join(), priorities, suspend/resume/stop.
-// suspend()/resume()/stop() are deprecated (and throw UnsupportedOperationException in
-// recent Java), so pausing and stopping are done safely with volatile flags.
-class User extends Thread {
-    private String[] msgs;
-    private volatile boolean paused = false;
-    private volatile boolean stopped = false;
+```python
+# GC7: Hash table of size 10, division method h(k) = k % 10, collisions by chaining
 
-    User(String name, String[] msgs) {
-        super(name);
-        this.msgs = msgs;
-    }
+SIZE = 10
+table = [[] for _ in range(SIZE)]     # each slot is a chain (list of [key, value])
 
-    void pauseUser()  { paused = true; }
-    void resumeUser() { paused = false; }
-    void stopUser()   { stopped = true; }
 
-    public void run() {
-        for (String m : msgs) {
-            if (stopped) break;
-            while (paused && !stopped) {                 // "suspended"
-                try { Thread.sleep(100); } catch (InterruptedException e) { }
-            }
-            if (stopped) break;
-            System.out.println(getName() + " [P" + getPriority() + "]: " + m);
-            try { Thread.sleep(500); } catch (InterruptedException e) { }
-        }
-        System.out.println(getName() + " left the chat");
-    }
-}
+def h(key):
+    return key % SIZE                 # division method
 
-public class Chat {
-    public static void main(String[] args) throws InterruptedException {
-        User a = new User("Ved",   new String[]{"Hi", "How are you?", "What's up?", "Bye"});
-        User b = new User("Amit",  new String[]{"Hello", "Good", "Studying", "See ya"});
-        User c = new User("Admin", new String[]{"URGENT: server restart", "Done"});
 
-        c.setPriority(Thread.MAX_PRIORITY);    // 10 - high-priority messages
-        a.setPriority(Thread.NORM_PRIORITY);   // 5
-        b.setPriority(Thread.MIN_PRIORITY);    // 1
+def insert(key, value):
+    chain = table[h(key)]
+    for pair in chain:
+        if pair[0] == key:            # key already there -> update value
+            pair[1] = value
+            return
+    chain.append([key, value])        # collision just grows the chain
 
-        System.out.println("Ved alive before start? " + a.isAlive());   // false
-        a.start(); b.start(); c.start();
-        System.out.println("Ved alive after start?  " + a.isAlive());   // true
 
-        Thread.sleep(600);
-        b.pauseUser();   System.out.println(">> Amit suspended");
-        Thread.sleep(1000);
-        b.resumeUser();  System.out.println(">> Amit resumed");
-        a.stopUser();    System.out.println(">> Ved stopped");
+def search(key):
+    for k, v in table[h(key)]:
+        if k == key:
+            return v
+    return None
 
-        a.join(); b.join(); c.join();          // main waits for all threads
-        System.out.println("Ved alive after join?   " + a.isAlive());   // false
-        System.out.println("Chat ended");
-    }
-}
+
+def delete(key):
+    chain = table[h(key)]
+    for i in range(len(chain)):
+        if chain[i][0] == key:
+            chain.pop(i)
+            return True
+    return False
+
+
+def display():
+    for i in range(SIZE):
+        print(i, "->", " -> ".join(f"({k},{v})" for k, v in table[i]) or "None")
+
+
+while True:
+    print("\n1.Insert  2.Search  3.Delete  4.Display  5.Exit")
+    ch = int(input("Choice: "))
+    if ch == 1:
+        k = int(input("Key: "))
+        v = input("Value: ")
+        insert(k, v)
+        print(f"Inserted at index {h(k)}")
+    elif ch == 2:
+        k = int(input("Key: "))
+        v = search(k)
+        print(f"Value = {v}" if v is not None else "Key not found")
+    elif ch == 3:
+        k = int(input("Key: "))
+        print("Deleted" if delete(k) else "Key not found")
+    elif ch == 4:
+        display()
+    elif ch == 5:
+        break
+    else:
+        print("Invalid choice")
 ```
 
----
+## GC8 – Hash table with linear probing
+File: `practicals/GC8_hash_linear_probing.py`
 
-# Group B – Computer Graphics
+```python
+# GC8: Fixed-size hash table, division method, collisions by linear probing
+# EMPTY = never used, DELETED = was used then deleted (so search keeps probing past it)
 
-## Lines
-**Lab B1: DDA rectangles (dotted, thick) + Bresenham diamond (dashed, solid)**  
-File: `unit4-graphics/Lines.java` · Run: `javac Lines.java` → `java Lines`
+EMPTY = None
+DELETED = "DEL"
 
-```java
-// Lab B1: DDA line (two rectangles: dotted + thick) and Bresenham line (diamond: dashed + solid)
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
+size = int(input("Table size: "))
+table = [EMPTY] * size
 
-public class Lines extends JPanel {
-    static final int W = 600, H = 500;
-    BufferedImage img = new BufferedImage(W, H, BufferedImage.TYPE_INT_RGB);
-    int color = Color.WHITE.getRGB();
 
-    void plot(int x, int y) {                                  // putpixel
-        if (x >= 0 && x < W && y >= 0 && y < H) img.setRGB(x, y, color);
-    }
+def h(key):
+    return key % size
 
-    // style: 0 = solid, 1 = dotted, 2 = dashed, 3 = thick
-    void plotStyled(int x, int y, int i, int style) {
-        if (style == 1 && i % 4 != 0) return;
-        if (style == 2 && i % 12 >= 8) return;
-        plot(x, y);
-        if (style == 3) { plot(x + 1, y); plot(x, y + 1); plot(x + 1, y + 1); }
-    }
 
-    void ddaLine(int x1, int y1, int x2, int y2, int style) {
-        int dx = x2 - x1, dy = y2 - y1;
-        int steps = Math.max(Math.abs(dx), Math.abs(dy));
-        if (steps == 0) { plot(x1, y1); return; }
-        double xinc = (double) dx / steps, yinc = (double) dy / steps;
-        double x = x1, y = y1;
-        for (int i = 0; i <= steps; i++) {
-            plotStyled((int) Math.round(x), (int) Math.round(y), i, style);
-            x += xinc;
-            y += yinc;
-        }
-    }
+def insert(key):
+    if search(key) != -1:
+        print("Key already present")
+        return
+    i = h(key)
+    for step in range(size):
+        j = (i + step) % size                  # (h(k) + i) % size
+        if table[j] is EMPTY or table[j] == DELETED:
+            table[j] = key
+            print(f"Inserted {key} at index {j}" + (f" (after {step} probes)" if step else ""))
+            return
+    print("Table full, cannot insert")
 
-    // Bresenham for all slopes/directions (integer arithmetic only)
-    void bresLine(int x1, int y1, int x2, int y2, int style) {
-        int dx = Math.abs(x2 - x1), dy = Math.abs(y2 - y1);
-        int sx = (x1 < x2) ? 1 : -1, sy = (y1 < y2) ? 1 : -1;
-        int err = dx - dy, i = 0;
-        while (true) {
-            plotStyled(x1, y1, i++, style);
-            if (x1 == x2 && y1 == y2) break;
-            int e2 = 2 * err;
-            if (e2 > -dy) { err -= dy; x1 += sx; }
-            if (e2 <  dx) { err += dx; y1 += sy; }
-        }
-    }
 
-    void ddaRect(int x1, int y1, int x2, int y2, int style) {
-        ddaLine(x1, y1, x2, y1, style); ddaLine(x2, y1, x2, y2, style);
-        ddaLine(x2, y2, x1, y2, style); ddaLine(x1, y2, x1, y1, style);
-    }
+def search(key):
+    i = h(key)
+    for step in range(size):
+        j = (i + step) % size
+        if table[j] is EMPTY:                  # empty slot -> key can't be further
+            return -1
+        if table[j] == key:
+            return j
+    return -1
 
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(img, 0, 0, null);
-    }
 
-    public static void main(String[] args) {
-        Lines c = new Lines();
+def delete(key):
+    j = search(key)
+    if j == -1:
+        return False
+    table[j] = DELETED                         # mark, don't empty
+    return True
 
-        c.color = Color.CYAN.getRGB();
-        c.ddaRect(100, 100, 500, 400, 1);      // outer rectangle - DDA dotted
-        c.ddaRect(150, 150, 450, 350, 3);      // inner rectangle - DDA thick
 
-        c.color = Color.YELLOW.getRGB();       // diamond through midpoints of outer rectangle
-        c.bresLine(300, 100, 500, 250, 2);     // Bresenham dashed
-        c.bresLine(500, 250, 300, 400, 2);
-        c.bresLine(300, 400, 100, 250, 0);     // Bresenham solid
-        c.bresLine(100, 250, 300, 100, 0);
+def display():
+    for i in range(size):
+        print(i, ":", "-" if table[i] is EMPTY else table[i])
 
-        JFrame f = new JFrame("DDA & Bresenham Lines");
-        f.add(c);
-        f.setSize(W + 20, H + 40);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setVisible(true);
-    }
-}
+
+while True:
+    print("\n1.Insert  2.Search  3.Delete  4.Display  5.Exit")
+    ch = int(input("Choice: "))
+    if ch == 1:
+        insert(int(input("Key: ")))
+    elif ch == 2:
+        j = search(int(input("Key: ")))
+        print(f"Found at index {j}" if j != -1 else "Key not found")
+    elif ch == 3:
+        print("Deleted" if delete(int(input("Key: "))) else "Key not found")
+    elif ch == 4:
+        display()
+    elif ch == 5:
+        break
+    else:
+        print("Invalid choice")
 ```
 
-## Circles
-**Lab B2: Menu: DDA / Bresenham / Midpoint circle, solid / dotted / dashed**  
-File: `unit4-graphics/Circles.java` · Run: `javac Circles.java` → `java Circles`
+## GD9 – City graph BFS and DFS
+File: `practicals/GD9_graph_bfs_dfs.py`
 
-```java
-// Lab B2: Menu-driven circle drawing - DDA, Bresenham, Midpoint - solid / dotted / dashed
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.Scanner;
+```python
+# GD9: City locations as a graph
+# DFS using an ADJACENCY MATRIX, BFS using an ADJACENCY LIST (as the question asks)
 
-public class Circles extends JPanel {
-    static final int W = 600, H = 500;
-    BufferedImage img = new BufferedImage(W, H, BufferedImage.TYPE_INT_RGB);
-    int color = Color.WHITE.getRGB();
-    int k = 0;                                                  // pixel counter for styles
+n = int(input("Number of locations: "))
+names = input("Location names separated by space (e.g. A B C D): ").split()
+index = {names[i]: i for i in range(n)}
 
-    void plot(int x, int y) {
-        if (x >= 0 && x < W && y >= 0 && y < H) img.setRGB(x, y, color);
-    }
+matrix = [[0] * n for _ in range(n)]       # for DFS
+adj = {name: [] for name in names}        # for BFS
 
-    // style: 0 = solid, 1 = dotted, 2 = dashed
-    void plotStyled(int x, int y, int i, int style) {
-        if (style == 1 && i % 4 != 0) return;
-        if (style == 2 && i % 12 >= 8) return;
-        plot(x, y);
-    }
+e = int(input("Number of routes: "))
+for _ in range(e):
+    u, v = input("Route (e.g. A B): ").split()
+    matrix[index[u]][index[v]] = matrix[index[v]][index[u]] = 1   # undirected
+    adj[u].append(v)
+    adj[v].append(u)
 
-    void plot8(int xc, int yc, int x, int y, int style) {      // 8-way symmetry
-        plotStyled(xc + x, yc + y, k, style); plotStyled(xc - x, yc + y, k, style);
-        plotStyled(xc + x, yc - y, k, style); plotStyled(xc - x, yc - y, k, style);
-        plotStyled(xc + y, yc + x, k, style); plotStyled(xc - y, yc + x, k, style);
-        plotStyled(xc + y, yc - x, k, style); plotStyled(xc - y, yc - x, k, style);
-        k++;
-    }
 
-    void bresCircle(int xc, int yc, int r, int style) {
-        int x = 0, y = r, d = 3 - 2 * r;
-        while (x <= y) {
-            plot8(xc, yc, x, y, style);
-            if (d < 0) d += 4 * x + 6;
-            else { d += 4 * (x - y) + 10; y--; }
-            x++;
-        }
-    }
+def dfs(i, visited, order):                # recursive DFS on the matrix
+    visited[i] = True
+    order.append(names[i])
+    for j in range(n):
+        if matrix[i][j] == 1 and not visited[j]:
+            dfs(j, visited, order)
 
-    void midCircle(int xc, int yc, int r, int style) {
-        int x = 0, y = r, p = 1 - r;
-        while (x <= y) {
-            plot8(xc, yc, x, y, style);
-            x++;
-            if (p < 0) p += 2 * x + 1;                  // midpoint inside -> keep y
-            else { y--; p += 2 * x - 2 * y + 1; }       // midpoint outside -> y--
-        }
-    }
 
-    void ddaCircle(int xc, int yc, int r, int style) {
-        int n = 0;
-        while ((1 << n) <= r) n++;                      // 2^(n-1) <= r < 2^n
-        double eps = 1.0 / (1 << n);
-        double x = 0, y = r;
-        int iters = (int) (2 * Math.PI / eps) + 1;
-        for (int i = 0; i < iters; i++) {
-            plotStyled(xc + (int) Math.round(x), yc + (int) Math.round(y), i, style);
-            double xn = x + eps * y;
-            double yn = y - eps * xn;
-            x = xn; y = yn;
-        }
-    }
+def bfs(start):                            # BFS with a queue on the list
+    visited = [start]
+    queue = [start]
+    order = []
+    while queue:
+        node = queue.pop(0)                # dequeue
+        order.append(node)
+        for nb in adj[node]:
+            if nb not in visited:
+                visited.append(nb)
+                queue.append(nb)           # enqueue
+    return order
 
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(img, 0, 0, null);
-    }
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        Circles c = new Circles();
-
-        System.out.print("Algorithm 1.DDA 2.Bresenham 3.Midpoint: ");
-        int alg = sc.nextInt();
-        System.out.print("Style 0.Solid 1.Dotted 2.Dashed: ");
-        int style = sc.nextInt();
-        System.out.print("Centre x y and radius (e.g. 300 250 150): ");
-        int xc = sc.nextInt(), yc = sc.nextInt(), r = sc.nextInt();
-
-        c.color = Color.GREEN.getRGB();
-        switch (alg) {
-            case 1:  c.ddaCircle(xc, yc, r, style); break;
-            case 2:  c.bresCircle(xc, yc, r, style); break;
-            default: c.midCircle(xc, yc, r, style);
-        }
-
-        JFrame f = new JFrame("Circle Drawing");
-        f.add(c);
-        f.setSize(W + 20, H + 40);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setVisible(true);
-    }
-}
+while True:
+    print("\n1.Show Matrix  2.Show List  3.DFS  4.BFS  5.Exit")
+    ch = int(input("Choice: "))
+    if ch == 1:
+        print("   " + "  ".join(names))
+        for i in range(n):
+            print(names[i], " ", "  ".join(map(str, matrix[i])))
+    elif ch == 2:
+        for k in adj:
+            print(k, "->", adj[k])
+    elif ch == 3:
+        s = input("Start location: ")
+        order = []
+        dfs(index[s], [False] * n, order)
+        print("DFS:", " -> ".join(order))
+    elif ch == 4:
+        s = input("Start location: ")
+        print("BFS:", " -> ".join(bfs(s)))
+    elif ch == 5:
+        break
+    else:
+        print("Invalid choice")
 ```
 
-## PolygonFill
-**Lab B3: Concave polygon: scan-line, flood and seed fill**  
-File: `unit4-graphics/PolygonFill.java` · Run: `javac PolygonFill.java` → `java PolygonFill`
+## GD10 – Binary search tree
+File: `practicals/GD10_bst.py`
 
-```java
-// Lab B3: Concave polygon filled using Scan-line fill, Flood fill, Seed (boundary) fill
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.*;
+```python
+# GD10: Binary Search Tree - insert, delete, search, display (inorder/preorder/postorder)
 
-public class PolygonFill extends JPanel {
-    static final int W = 600, H = 500;
-    BufferedImage img = new BufferedImage(W, H, BufferedImage.TYPE_INT_RGB);
-    int color = Color.WHITE.getRGB();
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
 
-    void plot(int x, int y) {
-        if (x >= 0 && x < W && y >= 0 && y < H) img.setRGB(x, y, color);
-    }
 
-    void bresLine(int x1, int y1, int x2, int y2) {
-        int dx = Math.abs(x2 - x1), dy = Math.abs(y2 - y1);
-        int sx = (x1 < x2) ? 1 : -1, sy = (y1 < y2) ? 1 : -1;
-        int err = dx - dy;
-        while (true) {
-            plot(x1, y1);
-            if (x1 == x2 && y1 == y2) break;
-            int e2 = 2 * err;
-            if (e2 > -dy) { err -= dy; x1 += sx; }
-            if (e2 <  dx) { err += dx; y1 += sy; }
-        }
-    }
+def insert(root, key):
+    if root is None:
+        return Node(key)
+    if key < root.data:
+        root.left = insert(root.left, key)
+    elif key > root.data:
+        root.right = insert(root.right, key)
+    else:
+        print("Duplicate key ignored")
+    return root
 
-    void polygon(int[] xs, int[] ys) {
-        for (int i = 0; i < xs.length; i++)
-            bresLine(xs[i], ys[i], xs[(i + 1) % xs.length], ys[(i + 1) % ys.length]);
-    }
 
-    // ---- Scan-line fill ----
-    void scanFill(int[] xs, int[] ys) {
-        int n = xs.length;
-        int ymin = Arrays.stream(ys).min().getAsInt();
-        int ymax = Arrays.stream(ys).max().getAsInt();
-        for (int y = ymin; y <= ymax; y++) {
-            ArrayList<Integer> xi = new ArrayList<>();
-            for (int i = 0; i < n; i++) {
-                int x1 = xs[i], y1 = ys[i], x2 = xs[(i + 1) % n], y2 = ys[(i + 1) % n];
-                if (y1 == y2) continue;                                  // skip horizontal edges
-                if (y1 > y2) { int t = x1; x1 = x2; x2 = t; t = y1; y1 = y2; y2 = t; }
-                if (y >= y1 && y < y2)                                   // half-open rule for vertices
-                    xi.add(x1 + (y - y1) * (x2 - x1) / (y2 - y1));
-            }
-            Collections.sort(xi);
-            for (int j = 0; j + 1 < xi.size(); j += 2)                   // fill between pairs
-                for (int x = xi.get(j); x <= xi.get(j + 1); x++) plot(x, y);
-        }
-    }
+def search(root, key):
+    while root:
+        if key == root.data:
+            return True
+        root = root.left if key < root.data else root.right
+    return False
 
-    // ---- Flood fill: replace connected pixels of the OLD interior colour (explicit stack) ----
-    void floodFill(int x, int y, int newC) {
-        int oldC = img.getRGB(x, y);
-        if (oldC == newC) return;
-        ArrayDeque<int[]> st = new ArrayDeque<>();
-        st.push(new int[]{x, y});
-        while (!st.isEmpty()) {
-            int[] p = st.pop();
-            int px = p[0], py = p[1];
-            if (px < 0 || py < 0 || px >= W || py >= H) continue;
-            if (img.getRGB(px, py) != oldC) continue;
-            img.setRGB(px, py, newC);
-            st.push(new int[]{px + 1, py}); st.push(new int[]{px - 1, py});   // 4-connected
-            st.push(new int[]{px, py + 1}); st.push(new int[]{px, py - 1});
-        }
-    }
 
-    // ---- Seed / Boundary fill: fill until the BOUNDARY colour ----
-    void boundaryFill(int x, int y, int fillC, int boundC) {
-        ArrayDeque<int[]> st = new ArrayDeque<>();
-        st.push(new int[]{x, y});
-        while (!st.isEmpty()) {
-            int[] p = st.pop();
-            int px = p[0], py = p[1];
-            if (px < 0 || py < 0 || px >= W || py >= H) continue;
-            int cur = img.getRGB(px, py);
-            if (cur == boundC || cur == fillC) continue;
-            img.setRGB(px, py, fillC);
-            st.push(new int[]{px + 1, py}); st.push(new int[]{px - 1, py});
-            st.push(new int[]{px, py + 1}); st.push(new int[]{px, py - 1});
-        }
-    }
+def min_node(root):
+    while root.left:
+        root = root.left
+    return root
 
-    /* Textbook recursive version (may stack-overflow on large areas):
-       void flood(int x, int y, int oldC, int newC) {
-           if (getpixel(x, y) == oldC) {
-               putpixel(x, y, newC);
-               flood(x + 1, y, oldC, newC); flood(x - 1, y, oldC, newC);
-               flood(x, y + 1, oldC, newC); flood(x, y - 1, oldC, newC);
-           }
-       }
-    */
 
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(img, 0, 0, null);
-    }
+def delete(root, key):
+    if root is None:
+        print("Key not found")
+        return None
+    if key < root.data:
+        root.left = delete(root.left, key)
+    elif key > root.data:
+        root.right = delete(root.right, key)
+    else:
+        if root.left is None:              # case 1 & 2: no child / only right child
+            return root.right
+        if root.right is None:             # case 2: only left child
+            return root.left
+        succ = min_node(root.right)        # case 3: two children -> inorder successor
+        root.data = succ.data
+        root.right = delete(root.right, succ.data)
+    return root
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        PolygonFill c = new PolygonFill();
 
-        // concave polygon: arrow-head pointing down (dent at (300,230))
-        int[] xs = {150, 300, 450, 300};
-        int[] ys = {150, 230, 150, 400};
+def inorder(root):                         # gives sorted order
+    if root:
+        inorder(root.left)
+        print(root.data, end=" ")
+        inorder(root.right)
 
-        System.out.print("Fill 1.Scan-line 2.Flood 3.Seed/Boundary: ");
-        int ch = sc.nextInt();
 
-        c.color = Color.WHITE.getRGB();
-        c.polygon(xs, ys);                                  // outline
-        c.color = Color.RED.getRGB();
-        int seedX = 300, seedY = 300;                       // a point truly inside the polygon
+def preorder(root):
+    if root:
+        print(root.data, end=" ")
+        preorder(root.left)
+        preorder(root.right)
 
-        switch (ch) {
-            case 1:  c.scanFill(xs, ys); break;
-            case 2:  c.floodFill(seedX, seedY, Color.BLUE.getRGB()); break;
-            default: c.boundaryFill(seedX, seedY, Color.GREEN.getRGB(), Color.WHITE.getRGB());
-        }
 
-        JFrame f = new JFrame("Polygon Filling");
-        f.add(c);
-        f.setSize(W + 20, H + 40);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setVisible(true);
-    }
-}
+def postorder(root):
+    if root:
+        postorder(root.left)
+        postorder(root.right)
+        print(root.data, end=" ")
+
+
+root = None
+
+while True:
+    print("\n1.Insert  2.Delete  3.Search  4.Display  5.Exit")
+    ch = int(input("Choice: "))
+    if ch == 1:
+        for k in map(int, input("Keys separated by space: ").split()):
+            root = insert(root, k)
+    elif ch == 2:
+        root = delete(root, int(input("Key to delete: ")))
+    elif ch == 3:
+        print("Found" if search(root, int(input("Key to search: "))) else "Not found")
+    elif ch == 4:
+        if root is None:
+            print("Tree is empty")
+            continue
+        print("Inorder  : ", end=""); inorder(root); print()
+        print("Preorder : ", end=""); preorder(root); print()
+        print("Postorder: ", end=""); postorder(root); print()
+    elif ch == 5:
+        break
+    else:
+        print("Invalid choice")
 ```
 
-## SutherlandHodgeman
-**Lab B4: Sutherland-Hodgeman polygon clipping, vertices entered interactively**  
-File: `unit4-graphics/SutherlandHodgeman.java` · Run: `javac SutherlandHodgeman.java` → `java SutherlandHodgeman`
+# Python basics
 
-```java
-// Lab B4: Sutherland-Hodgeman polygon clipping (vertices entered interactively)
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
-import java.util.List;
+## Python basics for DS
+File: `00-basics/python_basics.py`
 
-public class SutherlandHodgeman extends JPanel {
-    static double xmin = 150, ymin = 150, xmax = 450, ymax = 350;
-    List<double[]> original, clipped;
+```python
+# Python basics you need for every DS practical
+# Run it: python3 python_basics.py   (no input needed - the input() lines are shown in comments)
 
-    // edges: 0 = left, 1 = right, 2 = bottom, 3 = top
-    static boolean inside(double[] p, int e) {
-        switch (e) {
-            case 0:  return p[0] >= xmin;
-            case 1:  return p[0] <= xmax;
-            case 2:  return p[1] >= ymin;
-            default: return p[1] <= ymax;
-        }
-    }
+# ---------- 1. Input patterns (the ones practicals use) ----------
+# n = int(input("Enter n: "))                              # one integer
+# x = float(input("Enter salary: "))                       # one float
+# name = input("Name: ")                                   # one string
+# a = list(map(int, input("Numbers: ").split()))           # many ints on one line -> list
+# s = list(map(float, input("Salaries: ").split()))        # many floats on one line
+# u, v = input("Edge (A B): ").split()                     # two strings on one line
+# a = [int(input(f"Element {i+1}: ")) for i in range(n)]   # n ints, one per line
 
-    static double[] intersect(double[] a, double[] b, int e) {
-        double x, y;
-        if (e == 0 || e == 1) {
-            x = (e == 0) ? xmin : xmax;
-            y = a[1] + (b[1] - a[1]) * (x - a[0]) / (b[0] - a[0]);
-        } else {
-            y = (e == 2) ? ymin : ymax;
-            x = a[0] + (b[0] - a[0]) * (y - a[1]) / (b[1] - a[1]);
-        }
-        return new double[]{x, y};
-    }
+# ---------- 2. Variables and types ----------
+year = 2
+cgpa = 8.6
+name = "Riya"
+passed = True
+print(type(year), type(cgpa), type(name), type(passed))
+print(f"{name}, year {year}, CGPA {cgpa}")                 # f-string formatting
+print(7 // 2, 7 % 2, 7 / 2, 2 ** 5)                        # floor div, mod, true div, power
 
-    static List<double[]> clipPolygon(List<double[]> poly) {
-        for (int e = 0; e < 4; e++) {                          // one window edge at a time
-            List<double[]> out = new ArrayList<>();
-            int n = poly.size();
-            for (int i = 0; i < n; i++) {
-                double[] v1 = poly.get(i), v2 = poly.get((i + 1) % n);
-                boolean in1 = inside(v1, e), in2 = inside(v2, e);
-                if (in1 && in2)  out.add(v2);                                 // in -> in
-                else if (in1)    out.add(intersect(v1, v2, e));               // in -> out
-                else if (in2) { out.add(intersect(v1, v2, e)); out.add(v2); } // out -> in
-                // out -> out : nothing
-            }
-            poly = out;                                         // output feeds next edge
-            if (poly.isEmpty()) break;
-        }
-        return poly;
-    }
+# ---------- 3. Conditions ----------
+marks = 72
+if marks >= 75:
+    grade = "Distinction"
+elif marks >= 60:
+    grade = "First class"
+else:
+    grade = "Pass"
+print("Grade:", grade)
 
-    void drawPoly(Graphics g, List<double[]> p) {
-        for (int i = 0; i < p.size(); i++) {
-            double[] a = p.get(i), b = p.get((i + 1) % p.size());
-            g.drawLine((int) Math.round(a[0]), (int) Math.round(a[1]),
-                       (int) Math.round(b[0]), (int) Math.round(b[1]));
-        }
-    }
+# ---------- 4. Loops ----------
+for i in range(5):                 # 0 1 2 3 4
+    print(i, end=" ")
+print()
+for i in range(10, 0, -3):         # 10 7 4 1 (start, stop, step)
+    print(i, end=" ")
+print()
+i = 0
+while i < 3:
+    i += 1
+    if i == 2:
+        continue                   # skip rest of this iteration
+    print("while", i)
 
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.setColor(Color.WHITE);
-        g.drawRect((int) xmin, (int) ymin, (int) (xmax - xmin), (int) (ymax - ymin));
-        g.setColor(Color.DARK_GRAY);
-        drawPoly(g, original);                                  // before
-        g.setColor(Color.ORANGE);
-        drawPoly(g, clipped);                                   // after
-    }
+# ---------- 5. Lists (Python's array) ----------
+a = [40, 10, 30, 20]
+a.append(50)                       # add at end            O(1)
+a.insert(0, 5)                     # add at index          O(n)
+a.remove(30)                       # remove by value       O(n)
+last = a.pop()                     # remove last           O(1)
+first = a.pop(0)                   # remove first          O(n)
+print(a, last, first, len(a))
+print(a[0], a[-1], a[1:3], a[::-1])   # index, last, slice, reversed
+b = a[:]                           # COPY (b = a would share the same list)
+b.sort()                           # in-place sort
+print("sorted copy:", b, "original:", a, "sorted():", sorted(a, reverse=True))
+a[0], a[1] = a[1], a[0]            # swap - used in every sorting program
+print("after swap:", a)
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        SutherlandHodgeman p = new SutherlandHodgeman();
-        p.setBackground(Color.BLACK);
+# 2D list (matrix) - ALWAYS build it like this, not [[0]*n]*n
+rows, cols = 2, 3
+m = [[0] * cols for _ in range(rows)]
+m[0][1] = 5
+print(m)
 
-        System.out.print("Window xmin ymin xmax ymax (0 = default 150 150 450 350): ");
-        double first = sc.nextDouble();
-        if (first != 0) { xmin = first; ymin = sc.nextDouble(); xmax = sc.nextDouble(); ymax = sc.nextDouble(); }
+# list comprehension
+squares = [x * x for x in range(6)]
+evens = [x for x in squares if x % 2 == 0]
+print(squares, evens)
 
-        System.out.print("Number of polygon vertices (0 = sample triangle): ");
-        int n = sc.nextInt();
-        p.original = new ArrayList<>();
-        if (n == 0) {
-            p.original.add(new double[]{100, 300});
-            p.original.add(new double[]{300, 80});
-            p.original.add(new double[]{520, 300});
-        } else {
-            for (int i = 0; i < n; i++) {
-                System.out.print("Vertex " + (i + 1) + " x y: ");
-                p.original.add(new double[]{sc.nextDouble(), sc.nextDouble()});
-            }
-        }
+# ---------- 6. Dictionary (key -> value), used in hashing / graphs / counting ----------
+freq = {}
+for ch in "banana":
+    freq[ch] = freq.get(ch, 0) + 1   # count occurrences
+print(freq)
+graph = {"A": ["B", "C"], "B": ["A"], "C": ["A"]}
+for node in graph:
+    print(node, "->", graph[node])
+print("B" in graph, graph.keys(), graph.values())
 
-        p.clipped = clipPolygon(p.original);
-        System.out.println("Clipped polygon vertices:");
-        for (double[] v : p.clipped) System.out.printf("(%.1f, %.1f)%n", v[0], v[1]);
+# ---------- 7. Functions ----------
+def find_max(arr):
+    mx = arr[0]
+    for x in arr:
+        if x > mx:
+            mx = x
+    return mx
 
-        JFrame f = new JFrame("Sutherland-Hodgeman Polygon Clipping");
-        f.add(p);
-        f.setSize(620, 540);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setVisible(true);
-    }
-}
+
+def stats(arr):                    # returning more than one value
+    return min(arr), max(arr), sum(arr) / len(arr)
+
+
+print("max:", find_max([3, 9, 2]))
+lo, hi, avg = stats([3, 9, 2])
+print(lo, hi, avg)
+
+
+# ---------- 8. Recursion (needed for trees, DFS, quick/merge sort) ----------
+def factorial(n):
+    if n <= 1:                     # base case
+        return 1
+    return n * factorial(n - 1)    # recursive case
+
+
+def fib(n):
+    return n if n < 2 else fib(n - 1) + fib(n - 2)
+
+
+print(factorial(5), [fib(i) for i in range(8)])
+
+
+# ---------- 9. Classes (needed for Node, Stack, Queue, LinkedList, BST) ----------
+class Student:
+    def __init__(self, roll, name, marks):   # constructor
+        self.roll = roll
+        self.name = name
+        self.marks = marks
+
+    def show(self):
+        print(f"{self.roll} {self.name} {self.marks}")
+
+
+class Node:                        # the building block of linked lists and trees
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+
+s1 = Student(1, "Riya", 88)
+s1.show()
+n1, n2 = Node(10), Node(20)
+n1.next = n2                       # link two nodes
+print(n1.data, "->", n1.next.data)
+
+# ---------- 10. Menu-driven program skeleton (every practical uses this) ----------
+# while True:
+#     print("\n1.Insert  2.Delete  3.Display  4.Exit")
+#     ch = int(input("Choice: "))
+#     if ch == 1:
+#         ...
+#     elif ch == 4:
+#         break
+#     else:
+#         print("Invalid choice")
 ```
 
-## CohenSutherland
-**Lab B5: Cohen-Sutherland line clipping**  
-File: `unit4-graphics/CohenSutherland.java` · Run: `javac CohenSutherland.java` → `java CohenSutherland`
+# Unit I – Complexity, divide and conquer, greedy
 
-```java
-// Lab B5: Cohen-Sutherland line clipping (outcodes TBRL)
-import javax.swing.*;
-import java.awt.*;
-import java.util.Scanner;
+## Step count method
+File: `unit1-complexity/complexity_step_count.py`
 
-public class CohenSutherland extends JPanel {
-    static final int INSIDE = 0, LEFT = 1, RIGHT = 2, BOTTOM = 4, TOP = 8;
-    static int xmin = 150, ymin = 150, xmax = 450, ymax = 350;
+```python
+# Unit I: Step count method - count how many times the basic operation runs
+# Linear O(n), Quadratic O(n^2), Cubic O(n^3), Logarithmic O(log n)
 
-    double[][] original;           // lines before clipping {x1,y1,x2,y2}
-    double[][] clipped;            // after clipping (null = rejected)
+def linear(n):
+    steps = 0
+    for i in range(n):
+        steps += 1
+    return steps
 
-    static int code(double x, double y) {
-        int c = INSIDE;
-        if (x < xmin) c |= LEFT;   else if (x > xmax) c |= RIGHT;
-        if (y < ymin) c |= BOTTOM; else if (y > ymax) c |= TOP;
-        return c;
-    }
 
-    // returns clipped line or null if rejected
-    static double[] clip(double x1, double y1, double x2, double y2) {
-        int c1 = code(x1, y1), c2 = code(x2, y2);
-        while (true) {
-            if ((c1 | c2) == 0) return new double[]{x1, y1, x2, y2};   // trivially accept
-            if ((c1 & c2) != 0) return null;                           // trivially reject
-            int out = (c1 != 0) ? c1 : c2;
-            double x, y;
-            if ((out & TOP) != 0)         { x = x1 + (x2 - x1) * (ymax - y1) / (y2 - y1); y = ymax; }
-            else if ((out & BOTTOM) != 0) { x = x1 + (x2 - x1) * (ymin - y1) / (y2 - y1); y = ymin; }
-            else if ((out & RIGHT) != 0)  { y = y1 + (y2 - y1) * (xmax - x1) / (x2 - x1); x = xmax; }
-            else                          { y = y1 + (y2 - y1) * (xmin - x1) / (x2 - x1); x = xmin; }
-            if (out == c1) { x1 = x; y1 = y; c1 = code(x1, y1); }
-            else           { x2 = x; y2 = y; c2 = code(x2, y2); }
-        }
-    }
+def quadratic(n):
+    steps = 0
+    for i in range(n):
+        for j in range(n):
+            steps += 1
+    return steps
 
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.setColor(Color.WHITE);
-        g.drawRect(xmin, ymin, xmax - xmin, ymax - ymin);              // clipping window
-        for (int i = 0; i < original.length; i++) {
-            double[] o = original[i];
-            g.setColor(Color.DARK_GRAY);                               // original (faint)
-            g.drawLine((int) o[0], (int) o[1], (int) o[2], (int) o[3]);
-            if (clipped[i] != null) {
-                double[] cl = clipped[i];
-                g.setColor(Color.GREEN);                               // visible part
-                g.drawLine((int) Math.round(cl[0]), (int) Math.round(cl[1]),
-                           (int) Math.round(cl[2]), (int) Math.round(cl[3]));
-            }
-        }
-    }
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        CohenSutherland p = new CohenSutherland();
-        p.setBackground(Color.BLACK);
+def cubic(n):
+    steps = 0
+    for i in range(n):
+        for j in range(n):
+            for k in range(n):
+                steps += 1
+    return steps
 
-        System.out.println("Window: (" + xmin + "," + ymin + ") to (" + xmax + "," + ymax + ")");
-        System.out.print("How many lines? (0 = use sample lines): ");
-        int n = sc.nextInt();
-        if (n == 0) {
-            p.original = new double[][]{
-                {50, 200, 550, 300},     // crosses window -> clipped both ends
-                {200, 200, 400, 300},    // fully inside -> accepted
-                {50, 50, 120, 100},      // fully outside (top-left) -> rejected
-                {300, 50, 300, 450}      // vertical through window -> clipped
-            };
-        } else {
-            p.original = new double[n][4];
-            for (int i = 0; i < n; i++) {
-                System.out.print("Line " + (i + 1) + " x1 y1 x2 y2: ");
-                for (int j = 0; j < 4; j++) p.original[i][j] = sc.nextDouble();
-            }
-        }
 
-        p.clipped = new double[p.original.length][];
-        for (int i = 0; i < p.original.length; i++) {
-            double[] o = p.original[i];
-            p.clipped[i] = clip(o[0], o[1], o[2], o[3]);
-            System.out.printf("Line %d: codes %4s %4s -> %s%n", i + 1,
-                pad(code(o[0], o[1])), pad(code(o[2], o[3])),
-                p.clipped[i] == null ? "REJECTED" :
-                String.format("(%.1f,%.1f)-(%.1f,%.1f)", p.clipped[i][0], p.clipped[i][1], p.clipped[i][2], p.clipped[i][3]));
-        }
+def logarithmic(n):
+    steps = 0
+    i = n
+    while i > 1:            # i halves each time -> log2(n) iterations
+        i //= 2
+        steps += 1
+    return steps
 
-        JFrame f = new JFrame("Cohen-Sutherland Line Clipping");
-        f.add(p);
-        f.setSize(620, 540);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setVisible(true);
-    }
 
-    static String pad(int c) {                    // outcode as 4-bit string TBRL
-        return String.format("%4s", Integer.toBinaryString(c)).replace(' ', '0');
-    }
-}
+print(f"{'n':>5}{'log n':>8}{'n':>8}{'n^2':>10}{'n^3':>12}")
+for n in (8, 16, 32, 64):
+    print(f"{n:>5}{logarithmic(n):>8}{linear(n):>8}{quadratic(n):>10}{cubic(n):>12}")
+
+# Step count for sum of array:
+#   total = 0                1
+#   for x in arr:            n + 1
+#       total += x           n
+#   return total             1
+#   ---------------------------------
+#   T(n) = 2n + 3  ->  O(n)
+#
+# Big-O = upper bound (worst case), Omega = lower bound (best case),
+# Theta = tight bound (upper and lower are the same order).
 ```
 
-## Transform2D
-**Lab B6, B7, B8: 2D translate / rotate / scale / shear / reflect; triangle & rhombus; rotation about arbitrary point**  
-File: `unit5-transforms/Transform2D.java` · Run: `javac Transform2D.java` → `java Transform2D`
+## Divide and conquer – product sorting
+File: `unit1-complexity/divide_conquer_product_sort.py`
 
-```java
-// Labs B6, B7, B8: 2D transformations with 3x3 homogeneous matrices
-// translate, scale, rotate, shear, reflect about X/Y axis, rotate about an arbitrary point,
-// on an equilateral triangle or a rhombus. White = original, red = transformed.
-import javax.swing.*;
-import java.awt.*;
-import java.util.Scanner;
+```python
+# Unit I case study: E-commerce product sorting using Divide and Conquer (Merge sort)
+# Divide the list in half, sort each half recursively, then merge.  T(n) = 2T(n/2) + n = O(n log n)
 
-public class Transform2D extends JPanel {
-    double[][] orig, result;                 // each row = {x, y, 1}
+def merge_sort(products, key):
+    if len(products) <= 1:                       # base case
+        return products
+    mid = len(products) // 2
+    left = merge_sort(products[:mid], key)       # divide + conquer
+    right = merge_sort(products[mid:], key)
+    return merge(left, right, key)               # combine
 
-    static double[][] translate(double tx, double ty) {
-        return new double[][]{{1, 0, tx}, {0, 1, ty}, {0, 0, 1}};
-    }
-    static double[][] scale(double sx, double sy) {
-        return new double[][]{{sx, 0, 0}, {0, sy, 0}, {0, 0, 1}};
-    }
-    static double[][] rotate(double deg) {               // anticlockwise
-        double t = Math.toRadians(deg), c = Math.cos(t), s = Math.sin(t);
-        return new double[][]{{c, -s, 0}, {s, c, 0}, {0, 0, 1}};
-    }
-    static double[][] shear(double shx, double shy) {    // x' = x + shx*y, y' = y + shy*x
-        return new double[][]{{1, shx, 0}, {shy, 1, 0}, {0, 0, 1}};
-    }
-    static double[][] reflectX() { return new double[][]{{1, 0, 0}, {0, -1, 0}, {0, 0, 1}}; }
-    static double[][] reflectY() { return new double[][]{{-1, 0, 0}, {0, 1, 0}, {0, 0, 1}}; }
 
-    static double[][] multiply(double[][] a, double[][] b) {
-        double[][] r = new double[3][3];
-        for (int i = 0; i < 3; i++)
-            for (int j = 0; j < 3; j++)
-                for (int k = 0; k < 3; k++)
-                    r[i][j] += a[i][k] * b[k][j];
-        return r;
-    }
+def merge(left, right, key):
+    result = []
+    i = j = 0
+    while i < len(left) and j < len(right):
+        if left[i][key] <= right[j][key]:        # <= keeps it stable
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    result.extend(left[i:])
+    result.extend(right[j:])
+    return result
 
-    static double[][] apply(double[][] m, double[][] pts) {     // P' = M . P
-        double[][] out = new double[pts.length][3];
-        for (int p = 0; p < pts.length; p++)
-            for (int i = 0; i < 3; i++)
-                for (int k = 0; k < 3; k++)
-                    out[p][i] += m[i][k] * pts[p][k];
-        return out;
-    }
 
-    // rotation about arbitrary point = T(xr,yr) . R(theta) . T(-xr,-yr)
-    static double[][] rotateAbout(double deg, double xr, double yr) {
-        return multiply(translate(xr, yr), multiply(rotate(deg), translate(-xr, -yr)));
-    }
+products = [
+    {"name": "Laptop", "price": 55000, "rating": 4.4},
+    {"name": "Mouse", "price": 700, "rating": 4.1},
+    {"name": "Phone", "price": 18000, "rating": 4.6},
+    {"name": "Earbuds", "price": 1500, "rating": 3.9},
+    {"name": "Monitor", "price": 12000, "rating": 4.3},
+]
 
-    // scaling about a fixed point = T(xf,yf) . S(sx,sy) . T(-xf,-yf)
-    static double[][] scaleAbout(double sx, double sy, double xf, double yf) {
-        return multiply(translate(xf, yf), multiply(scale(sx, sy), translate(-xf, -yf)));
-    }
+print("By price (low to high):")
+for p in merge_sort(products, "price"):
+    print(f"  {p['name']:<8} Rs {p['price']}")
 
-    int sx(double x) { return getWidth() / 2 + (int) Math.round(x); }   // origin at centre
-    int sy(double y) { return getHeight() / 2 - (int) Math.round(y); }  // flip y (maths axes)
-
-    void drawShape(Graphics g, double[][] p, Color col) {
-        g.setColor(col);
-        for (int i = 0; i < p.length; i++) {
-            int j = (i + 1) % p.length;
-            g.drawLine(sx(p[i][0]), sy(p[i][1]), sx(p[j][0]), sy(p[j][1]));
-        }
-    }
-
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.setColor(Color.GRAY);
-        g.drawLine(0, getHeight() / 2, getWidth(), getHeight() / 2);
-        g.drawLine(getWidth() / 2, 0, getWidth() / 2, getHeight());
-        drawShape(g, orig, Color.WHITE);
-        drawShape(g, result, Color.RED);
-    }
-
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        Transform2D t = new Transform2D();
-        t.setBackground(Color.BLACK);
-
-        System.out.print("Shape 1.Equilateral triangle 2.Rhombus: ");
-        if (sc.nextInt() == 1)
-            t.orig = new double[][]{{0, 0, 1}, {100, 0, 1}, {50, 86.6, 1}};
-        else
-            t.orig = new double[][]{{0, 0, 1}, {60, 40, 1}, {0, 80, 1}, {-60, 40, 1}};
-
-        System.out.println("1.Translate 2.Scale 3.Rotate 4.Shear 5.Reflect about X axis");
-        System.out.println("6.Reflect about Y axis 7.Rotate about arbitrary point 8.Scale about fixed point");
-        int ch = sc.nextInt();
-        double[][] m;
-        switch (ch) {
-            case 1:  System.out.print("tx ty: ");   m = translate(sc.nextDouble(), sc.nextDouble()); break;
-            case 2:  System.out.print("sx sy: ");   m = scale(sc.nextDouble(), sc.nextDouble()); break;
-            case 3:  System.out.print("angle: ");   m = rotate(sc.nextDouble()); break;
-            case 4:  System.out.print("shx shy: "); m = shear(sc.nextDouble(), sc.nextDouble()); break;
-            case 5:  m = reflectX(); break;
-            case 6:  m = reflectY(); break;
-            case 7:  System.out.print("angle xr yr: ");
-                     m = rotateAbout(sc.nextDouble(), sc.nextDouble(), sc.nextDouble()); break;
-            default: System.out.print("sx sy xf yf: ");
-                     m = scaleAbout(sc.nextDouble(), sc.nextDouble(), sc.nextDouble(), sc.nextDouble());
-        }
-        t.result = apply(m, t.orig);
-
-        for (int i = 0; i < t.orig.length; i++)
-            System.out.printf("(%.1f, %.1f) -> (%.1f, %.1f)%n",
-                t.orig[i][0], t.orig[i][1], t.result[i][0], t.result[i][1]);
-
-        JFrame f = new JFrame("2D Transformations");
-        f.add(t);
-        f.setSize(700, 600);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setVisible(true);
-    }
-}
+print("By rating (high to low):")
+for p in reversed(merge_sort(products, "rating")):
+    print(f"  {p['name']:<8} {p['rating']}")
 ```
 
----
+## Greedy – calendar scheduling
+File: `unit1-complexity/greedy_calendar.py`
 
-# Extra practice (not on the lab list)
+```python
+# Unit I case study: Google Calendar style scheduling using the Greedy strategy
+# Activity selection: fit the MAXIMUM number of non-overlapping meetings.
+# Greedy choice: always pick the meeting that ENDS earliest.  Time O(n log n) for the sort.
 
-## Basics
-**Data types, operators, if/else, switch, loops**  
-File: `unit1-basics/Basics.java` · Run: `javac Basics.java` → `java Basics`
+meetings = [
+    ("Standup", 9, 10),
+    ("Design review", 9, 12),
+    ("Lunch", 12, 13),
+    ("Client call", 10, 11),
+    ("Lab", 11, 14),
+    ("Code review", 13, 15),
+    ("1:1", 15, 16),
+]
 
-```java
-// Unit 1 syntax in one runnable file: data types, casting, operators, if/else, switch, all loops
-import java.util.Scanner;
+meetings.sort(key=lambda m: m[2])        # sort by end time
 
-public class Basics {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+chosen = []
+last_end = 0
+for name, start, end in meetings:
+    if start >= last_end:                # doesn't overlap the last chosen meeting
+        chosen.append((name, start, end))
+        last_end = end
 
-        // ---- data types + casting ----
-        int i = 10;
-        double d = i;              // widening (automatic)
-        double pi = 9.7;
-        int cut = (int) pi;        // narrowing (manual) -> 9
-        char c = 'A';
-        boolean flag = true;
-        System.out.println(i + " " + d + " " + cut + " " + c + " " + flag);
-
-        // ---- operators ----
-        int x = 10, y = 3;
-        System.out.println("x/y = " + (x / y));                 // 3 (integer division)
-        System.out.println("x%y = " + (x % y));                 // 1
-        System.out.println("(double)x/y = " + ((double) x / y));
-        System.out.println("max = " + ((x > y) ? x : y));       // ternary
-        int a = 5;
-        System.out.println(a++ + " " + a);                      // 5 6 (post-increment)
-        System.out.println(++a + " " + a);                      // 7 7 (pre-increment)
-
-        // ---- if / else-if ----
-        System.out.print("Enter marks: ");
-        int marks = sc.nextInt();
-        if (marks >= 75) System.out.println("Distinction");
-        else if (marks >= 40) System.out.println("Pass");
-        else System.out.println("Fail");
-
-        // ---- switch ----
-        System.out.print("Enter day number (1-3): ");
-        switch (sc.nextInt()) {
-            case 1: System.out.println("Monday"); break;
-            case 2: System.out.println("Tuesday"); break;
-            case 3: System.out.println("Wednesday"); break;
-            default: System.out.println("Invalid");
-        }
-
-        // ---- loops ----
-        for (int k = 1; k <= 5; k++) System.out.print(k + " ");
-        System.out.println();
-
-        int n = 5;
-        while (n > 0) { System.out.print(n + " "); n--; }
-        System.out.println();
-
-        int m = 10;
-        do { System.out.println("do-while runs at least once, m = " + m); } while (m < 5);
-
-        int[] arr = {4, 8, 15, 16, 23, 42};
-        int sum = 0;
-        for (int v : arr) sum += v;                              // for-each
-        System.out.println("Sum = " + sum);
-
-        // break and continue
-        for (int k = 1; k <= 10; k++) {
-            if (k % 2 == 0) continue;      // skip even
-            if (k > 7) break;              // stop after 7
-            System.out.print(k + " ");     // 1 3 5 7
-        }
-        System.out.println();
-        sc.close();
-    }
-}
+print("Selected meetings:")
+for name, s, e in chosen:
+    print(f"  {s:>2}:00 - {e:>2}:00  {name}")
+print("Total:", len(chosen))
 ```
 
-## ArrayStats
-**Array input: sum, largest, even count**  
-File: `unit1-basics/ArrayStats.java` · Run: `javac ArrayStats.java` → `java ArrayStats`
+# Unit II – Arrays, searching, sorting
 
-```java
-// Practice: read n numbers, print sum, largest, and count of even numbers
-import java.util.Scanner;
+## Arrays and matrices
+File: `unit2-arrays-search-sort/arrays_matrices.py`
 
-public class ArrayStats {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("How many numbers? ");
-        int n = sc.nextInt();
-        int[] a = new int[n];
+```python
+# Unit II: Array as an ADT, 2D matrices, sparse matrix, adjacency matrix case study
 
-        for (int i = 0; i < n; i++) {
-            System.out.print("Enter number " + (i + 1) + ": ");
-            a[i] = sc.nextInt();
-        }
+# ---------- Array ADT operations ----------
+def traverse(a):
+    for i in range(len(a)):
+        print(a[i], end=" ")
+    print()
 
-        int sum = 0, max = a[0], even = 0;
-        for (int v : a) {
-            sum += v;
-            if (v > max) max = v;
-            if (v % 2 == 0) even++;
-        }
 
-        System.out.println("Sum = " + sum);
-        System.out.println("Largest = " + max);
-        System.out.println("Even count = " + even);
-        sc.close();
-    }
-}
+def insert_at(a, pos, x):        # shift right, O(n)
+    a.append(None)
+    for i in range(len(a) - 1, pos, -1):
+        a[i] = a[i - 1]
+    a[pos] = x
+
+
+def delete_at(a, pos):           # shift left, O(n)
+    x = a[pos]
+    for i in range(pos, len(a) - 1):
+        a[i] = a[i + 1]
+    a.pop()
+    return x
+
+
+arr = [10, 20, 30, 40]
+insert_at(arr, 1, 15)
+print("After insert 15 at 1:", arr)
+print("Deleted:", delete_at(arr, 3), "->", arr)
+traverse(arr)
+
+# Storage representation (row-major), base address B, element size w, n columns:
+#   address(A[i][j]) = B + (i * n + j) * w
+# Column-major, m rows:  address(A[i][j]) = B + (j * m + i) * w
+B, w, m, n = 1000, 4, 3, 4
+print("Row-major A[2][1]    =", B + (2 * n + 1) * w)
+print("Column-major A[2][1] =", B + (1 * m + 2) * w)
+
+
+# ---------- 2D matrix operations ----------
+def add(A, Bm):
+    return [[A[i][j] + Bm[i][j] for j in range(len(A[0]))] for i in range(len(A))]
+
+
+def multiply(A, Bm):             # O(n^3)
+    r, c, k = len(A), len(Bm[0]), len(Bm)
+    C = [[0] * c for _ in range(r)]
+    for i in range(r):
+        for j in range(c):
+            for x in range(k):
+                C[i][j] += A[i][x] * Bm[x][j]
+    return C
+
+
+def transpose(A):
+    return [[A[i][j] for i in range(len(A))] for j in range(len(A[0]))]
+
+
+A = [[1, 2], [3, 4]]
+Bm = [[5, 6], [7, 8]]
+print("A+B =", add(A, Bm), " AxB =", multiply(A, Bm), " A^T =", transpose(A))
+
+
+# ---------- Sparse matrix (triplet form: row, col, value) ----------
+def to_triplet(M):
+    t = [(len(M), len(M[0]), 0)]             # header: rows, cols, count of non-zeros
+    for i in range(len(M)):
+        for j in range(len(M[0])):
+            if M[i][j] != 0:
+                t.append((i, j, M[i][j]))
+    t[0] = (len(M), len(M[0]), len(t) - 1)
+    return t
+
+
+def sparse_transpose(t):                     # simple transpose: swap row and col, then sort
+    rows, cols, cnt = t[0]
+    body = sorted((c, r, v) for r, c, v in t[1:])
+    return [(cols, rows, cnt)] + body
+
+
+S = [[0, 0, 3, 0],
+     [0, 0, 0, 0],
+     [5, 0, 0, 7],
+     [0, 2, 0, 0]]
+trip = to_triplet(S)
+print("Triplet  :", trip)
+print("Transpose:", sparse_transpose(trip))
+
+# ---------- Case study: social network as an adjacency matrix ----------
+users = ["Asha", "Ben", "Chen", "Dev"]
+friends = [("Asha", "Ben"), ("Asha", "Chen"), ("Chen", "Dev")]
+idx = {u: i for i, u in enumerate(users)}
+adj = [[0] * len(users) for _ in users]
+for a, b in friends:
+    adj[idx[a]][idx[b]] = adj[idx[b]][idx[a]] = 1
+for i, u in enumerate(users):
+    print(f"{u:<5}", adj[i], "friends:", sum(adj[i]))
+# For millions of users a matrix needs n^2 cells and is mostly zeros -> use adjacency lists.
 ```
 
-## StudentDemo
-**Class, constructors, this, static, overloading, array of objects**  
-File: `unit2-classes/StudentDemo.java` · Run: `javac StudentDemo.java` → `java StudentDemo`
+## Searching
+File: `unit2-arrays-search-sort/searching.py`
 
-```java
-// Unit 2: class, fields, constructors (default/parameterized/copy), this, static,
-// getters/setters, object as parameter, returning object, overloading, array of objects
-class Student {
-    private int roll;
-    private String name;
-    private double marks;
-    static int count = 0;              // shared by all objects
+```python
+# Unit II: Searching - Linear, Sentinel, Binary, Fibonacci, Indexed Sequential
 
-    Student() {                        // default constructor
-        this(0, "Unknown", 0);         // constructor chaining, must be first line
-    }
+def linear_search(a, key):                  # O(n)
+    for i in range(len(a)):
+        if a[i] == key:
+            return i
+    return -1
 
-    Student(int roll, String name, double marks) {   // parameterized
-        this.roll = roll;
-        this.name = name;
-        this.marks = marks;
-        count++;
-    }
 
-    Student(Student s) {               // copy constructor (written by hand in Java)
-        this(s.roll, s.name, s.marks);
-    }
+def sentinel_search(a, key):                # one comparison per step instead of two
+    n = len(a)
+    last = a[n - 1]
+    a[n - 1] = key                          # put key at end as sentinel
+    i = 0
+    while a[i] != key:
+        i += 1
+    a[n - 1] = last                         # restore
+    if i < n - 1 or last == key:
+        return i
+    return -1
 
-    public String getName() { return name; }
-    public double getMarks() { return marks; }
-    public void setMarks(double m) {
-        if (m >= 0 && m <= 100) marks = m;
-        else System.out.println("Invalid marks");
-    }
 
-    Student topper(Student other) {    // object as parameter + returning object
-        return (this.marks >= other.marks) ? this : other;
-    }
+def binary_search(a, key):                  # sorted list, O(log n)
+    low, high = 0, len(a) - 1
+    while low <= high:
+        mid = (low + high) // 2
+        if a[mid] == key:
+            return mid
+        if key < a[mid]:
+            high = mid - 1
+        else:
+            low = mid + 1
+    return -1
 
-    void show() { System.out.println(roll + " " + name + " " + marks); }       // overloading
-    void show(String prefix) { System.out.println(prefix + ": " + name); }
 
-    static int getCount() { return count; }
-}
+def fibonacci_search(a, key):               # sorted list, splits using Fibonacci numbers, O(log n)
+    n = len(a)
+    f2, f1 = 0, 1                           # F(k-2), F(k-1)
+    f = f1 + f2                             # F(k)
+    while f < n:
+        f2, f1 = f1, f
+        f = f1 + f2
+    offset = -1
+    while f > 1:
+        i = min(offset + f2, n - 1)
+        if a[i] < key:                      # go right: drop one Fibonacci step
+            f, f1 = f1, f2
+            f2 = f - f1
+            offset = i
+        elif a[i] > key:                    # go left: drop two Fibonacci steps
+            f = f2
+            f1 = f1 - f2
+            f2 = f - f1
+        else:
+            return i
+    if f1 and offset + 1 < n and a[offset + 1] == key:
+        return offset + 1
+    return -1
 
-public class StudentDemo {
-    public static void main(String[] args) {
-        Student s1 = new Student(1, "Ved", 88);
-        Student s2 = new Student(2, "Amit", 92);
-        Student s3 = new Student(s1);
-        Student s4 = new Student();
 
-        s1.topper(s2).show("Topper");
-        s3.setMarks(150);                      // Invalid marks
-        s4.show();
-        System.out.println("Objects: " + Student.getCount());
+def indexed_sequential_search(a, key, block=3):   # sorted list
+    index = [(a[i], i) for i in range(0, len(a), block)]   # first key of each block
+    start = 0
+    for k, pos in index:
+        if k > key:
+            break
+        start = pos
+    for i in range(start, min(start + block, len(a))):    # search inside that block only
+        if a[i] == key:
+            return i
+    return -1
 
-        Student[] list = { s1, s2, s3 };       // array of objects
-        for (Student s : list) s.show();
 
-        Student r = s1;                        // same object, two references
-        r.setMarks(50);
-        System.out.println("s1 marks now: " + s1.getMarks());   // 50.0
-    }
-}
+data = [12, 4, 56, 23, 89, 45, 7]
+s = sorted(data)
+print("Unsorted:", data, " Sorted:", s)
+for key in (45, 100):
+    print(f"key {key}: linear={linear_search(data, key)} sentinel={sentinel_search(data, key)} "
+          f"binary={binary_search(s, key)} fibonacci={fibonacci_search(s, key)} "
+          f"indexed={indexed_sequential_search(s, key)}")
+for key in s:                                         # every element must be found
+    assert fibonacci_search(s, key) == s.index(key)
+    assert indexed_sequential_search(s, key) == s.index(key)
+print("All searches agree on every element.")
 ```
 
-## ArgsAndIO
-**Varargs, command-line args, BufferedReader**  
-File: `unit2-classes/ArgsAndIO.java` · Run: `javac ArgsAndIO.java` → `java ArgsAndIO`
+## Sorting
+File: `unit2-arrays-search-sort/sorting.py`
 
-```java
-// Unit 2 extras: passing arrays, varargs, command-line args, BufferedReader, PrintWriter
-// Run: java ArgsAndIO 10 20
-import java.io.*;
+```python
+# Unit II: Sorting - Bubble, Selection, Insertion, Quick, Merge (with pass counts)
+#
+# Algorithm   Best        Average     Worst       Stable  In-place
+# Bubble      O(n)        O(n^2)      O(n^2)      Yes     Yes
+# Selection   O(n^2)      O(n^2)      O(n^2)      No      Yes
+# Insertion   O(n)        O(n^2)      O(n^2)      Yes     Yes
+# Quick       O(n log n)  O(n log n)  O(n^2)      No      Yes
+# Merge       O(n log n)  O(n log n)  O(n log n)  Yes     No (O(n) extra)
 
-public class ArgsAndIO {
-    static void doubleAll(int[] a) {             // array passed by reference value -> original changes
-        for (int i = 0; i < a.length; i++) a[i] *= 2;
-    }
+def bubble_sort(a):
+    a = a[:]
+    n = len(a)
+    for i in range(n - 1):
+        swapped = False
+        for j in range(n - 1 - i):
+            if a[j] > a[j + 1]:
+                a[j], a[j + 1] = a[j + 1], a[j]
+                swapped = True
+        print(f"  pass {i + 1}: {a}")
+        if not swapped:
+            break
+    return a
 
-    static int sum(int... nums) {                // varargs: nums is an int[]
-        int s = 0;
-        for (int x : nums) s += x;
-        return s;
-    }
 
-    public static void main(String[] args) throws IOException {
-        // command-line arguments are always Strings
-        if (args.length >= 2) {
-            int a = Integer.parseInt(args[0]);
-            int b = Integer.parseInt(args[1]);
-            System.out.println("Args sum = " + (a + b));
-        } else {
-            System.out.println("Tip: run as  java ArgsAndIO 10 20");
-        }
+def selection_sort(a):
+    a = a[:]
+    for i in range(len(a) - 1):
+        mn = i
+        for j in range(i + 1, len(a)):
+            if a[j] < a[mn]:
+                mn = j
+        a[i], a[mn] = a[mn], a[i]
+        print(f"  pass {i + 1}: {a}")
+    return a
 
-        int[] arr = {1, 2, 3};
-        doubleAll(arr);
-        System.out.println("After doubleAll: " + arr[0] + " " + arr[1] + " " + arr[2]);
-        System.out.println("sum(1,2) = " + sum(1, 2) + ", sum(4,5,6) = " + sum(4, 5, 6));
 
-        // BufferedReader: reads Strings only, so parse them
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        System.out.print("Enter your name: ");
-        String name = br.readLine();
-        System.out.print("Enter your age: ");
-        int age = Integer.parseInt(br.readLine().trim());
+def insertion_sort(a):
+    a = a[:]
+    for i in range(1, len(a)):
+        key = a[i]
+        j = i - 1
+        while j >= 0 and a[j] > key:        # shift bigger elements right
+            a[j + 1] = a[j]
+            j -= 1
+        a[j + 1] = key
+        print(f"  pass {i}: {a}")
+    return a
 
-        // PrintWriter: character output stream, true = auto-flush
-        PrintWriter pw = new PrintWriter(System.out, true);
-        pw.println("Hello " + name + ", next year you will be " + (age + 1));
-    }
-}
+
+def partition(a, low, high):                # last element as pivot (Lomuto)
+    pivot = a[high]
+    i = low - 1
+    for j in range(low, high):
+        if a[j] <= pivot:
+            i += 1
+            a[i], a[j] = a[j], a[i]
+    a[i + 1], a[high] = a[high], a[i + 1]
+    return i + 1
+
+
+def quick_sort(a, low, high):
+    if low < high:
+        p = partition(a, low, high)         # pivot is now in its final place
+        quick_sort(a, low, p - 1)
+        quick_sort(a, p + 1, high)
+
+
+def merge_sort(a):
+    if len(a) <= 1:
+        return a
+    mid = len(a) // 2
+    left, right = merge_sort(a[:mid]), merge_sort(a[mid:])
+    out, i, j = [], 0, 0
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            out.append(left[i]); i += 1
+        else:
+            out.append(right[j]); j += 1
+    return out + left[i:] + right[j:]
+
+
+data = [29, 10, 14, 37, 13]
+print("Input:", data)
+print("Bubble:");    bubble_sort(data)
+print("Selection:"); selection_sort(data)
+print("Insertion:"); insertion_sort(data)
+q = data[:]
+quick_sort(q, 0, len(q) - 1)
+print("Quick :", q)
+print("Merge :", merge_sort(data))
+# Internal sort: data fits in RAM. External sort: data on disk, sorted in chunks then merged.
 ```
 
-## ShapesAbstract
-**Abstract class, dynamic binding**  
-File: `unit3-oop/ShapesAbstract.java` · Run: `javac ShapesAbstract.java` → `java ShapesAbstract`
+# Unit III – Stacks, queues, linked lists
 
-```java
-// Unit 3: abstract class, abstract method, dynamic binding (runtime polymorphism), final, toString
-abstract class Shape {
-    final String unit = "sq units";            // final variable = constant
+## Stack and expressions
+File: `unit3-stack-queue-linkedlist/stack_expressions.py`
 
-    abstract double area();                    // no body
+```python
+# Unit III: Stack, multiple stacks, infix -> postfix / prefix, postfix evaluation
 
-    void display() {                           // concrete method
-        System.out.println(getClass().getSimpleName() + " area = " + String.format("%.2f", area()) + " " + unit);
-    }
-}
+class Stack:
+    def __init__(self):
+        self.items = []
 
-class Circle extends Shape {
-    double r;
-    Circle(double r) { this.r = r; }
-    double area() { return Math.PI * r * r; }
-    @Override public String toString() { return "Circle(r=" + r + ")"; }   // from Object class
-}
+    def push(self, x):
+        self.items.append(x)
 
-class Rect extends Shape {
-    double l, b;
-    Rect(double l, double b) { this.l = l; this.b = b; }
-    double area() { return l * b; }
-}
+    def pop(self):
+        if self.is_empty():
+            print("Stack underflow")
+            return None
+        return self.items.pop()
 
-final class Square extends Rect {              // final class: cannot be extended
-    Square(double s) { super(s, s); }
-}
+    def peek(self):
+        return self.items[-1] if self.items else None
 
-public class ShapesAbstract {
-    public static void main(String[] args) {
-        Shape[] shapes = { new Circle(2), new Rect(3, 4), new Square(5) };
-        for (Shape s : shapes) s.display();    // same call, different behaviour
+    def is_empty(self):
+        return len(self.items) == 0
 
-        Shape s = new Circle(1);               // parent reference, child object
-        System.out.println(s);                 // calls Circle's toString()
-        // Shape x = new Shape();              // ERROR: abstract class cannot be instantiated
-    }
-}
+
+# ---------- Two stacks in one array (multiple stacks) ----------
+class TwoStacks:
+    def __init__(self, size):
+        self.arr = [None] * size
+        self.top1, self.top2 = -1, size      # stack 1 grows right, stack 2 grows left
+
+    def push1(self, x):
+        if self.top1 + 1 == self.top2:
+            print("Overflow"); return
+        self.top1 += 1
+        self.arr[self.top1] = x
+
+    def push2(self, x):
+        if self.top2 - 1 == self.top1:
+            print("Overflow"); return
+        self.top2 -= 1
+        self.arr[self.top2] = x
+
+    def pop1(self):
+        x = self.arr[self.top1]; self.top1 -= 1; return x
+
+    def pop2(self):
+        x = self.arr[self.top2]; self.top2 += 1; return x
+
+
+# ---------- Expression conversion ----------
+PREC = {"+": 1, "-": 1, "*": 2, "/": 2, "^": 3}
+
+
+def infix_to_postfix(exp):
+    st = Stack()
+    out = ""
+    for ch in exp:
+        if ch.isalnum():                     # operand goes straight to output
+            out += ch
+        elif ch == "(":
+            st.push(ch)
+        elif ch == ")":
+            while st.peek() != "(":
+                out += st.pop()
+            st.pop()                         # discard "("
+        else:                                # operator
+            while (not st.is_empty() and st.peek() != "(" and
+                   (PREC[st.peek()] > PREC[ch] or
+                    (PREC[st.peek()] == PREC[ch] and ch != "^"))):   # ^ is right-associative
+                out += st.pop()
+            st.push(ch)
+    while not st.is_empty():
+        out += st.pop()
+    return out
+
+
+def infix_to_prefix(exp):
+    # reverse, swap brackets, convert to postfix (^ handled as left-assoc here), reverse again
+    rev = ""
+    for ch in exp[::-1]:
+        rev += "(" if ch == ")" else ")" if ch == "(" else ch
+    st = Stack()
+    out = ""
+    for ch in rev:
+        if ch.isalnum():
+            out += ch
+        elif ch == "(":
+            st.push(ch)
+        elif ch == ")":
+            while st.peek() != "(":
+                out += st.pop()
+            st.pop()
+        else:
+            while (not st.is_empty() and st.peek() != "(" and
+                   (PREC[st.peek()] > PREC[ch] or (PREC[st.peek()] == PREC[ch] and ch == "^"))):
+                out += st.pop()
+            st.push(ch)
+    while not st.is_empty():
+        out += st.pop()
+    return out[::-1]
+
+
+def evaluate_postfix(exp):                    # space-separated tokens, e.g. "5 3 + 2 *"
+    st = Stack()
+    for tok in exp.split():
+        if tok.lstrip("-").isdigit():
+            st.push(int(tok))
+        else:
+            b, a = st.pop(), st.pop()        # second operand is popped first
+            if tok == "+": st.push(a + b)
+            elif tok == "-": st.push(a - b)
+            elif tok == "*": st.push(a * b)
+            elif tok == "/": st.push(a / b)
+            elif tok == "^": st.push(a ** b)
+    return st.pop()
+
+
+for e in ("A+B*C", "(A+B)*C", "A+B*(C^D-E)", "A^B^C"):
+    print(f"{e:<14} postfix: {infix_to_postfix(e):<12} prefix: {infix_to_prefix(e)}")
+print("5 3 + 2 * =", evaluate_postfix("5 3 + 2 *"))
+print("6 2 / 3 4 * + =", evaluate_postfix("6 2 / 3 4 * +"))
+
+ts = TwoStacks(5)
+ts.push1(1); ts.push1(2); ts.push2(9); ts.push2(8)
+print("TwoStacks array:", ts.arr, " pop1:", ts.pop1(), " pop2:", ts.pop2())
 ```
 
-## ExceptionDemo
-**Built-in exceptions, nested try, throws, custom exception**  
-File: `unit3-oop/ExceptionDemo.java` · Run: `javac ExceptionDemo.java` → `java ExceptionDemo`
+## Queues
+File: `unit3-stack-queue-linkedlist/queues.py`
 
-```java
-// Unit 3: built-in exceptions, multiple catch, nested try, throw vs throws, custom exception
-class InsufficientFundsException extends Exception {        // custom CHECKED exception
-    InsufficientFundsException(String msg) { super(msg); }
-}
+```python
+# Unit III: Linear queue, Circular queue, Priority queue
 
-public class ExceptionDemo {
+# ---------- Linear queue (array with front and rear) ----------
+class LinearQueue:
+    def __init__(self, size):
+        self.q = [None] * size
+        self.size = size
+        self.front = self.rear = -1
 
-    // throws: declares that this method may throw a checked exception
-    static void withdraw(double bal, double amt) throws InsufficientFundsException {
-        if (amt > bal) throw new InsufficientFundsException("Need " + (amt - bal) + " more");
-        System.out.println("Withdrawn " + amt);
-    }
+    def enqueue(self, x):
+        if self.rear == self.size - 1:
+            print("Queue full")              # can be "full" even with free space at front
+            return
+        if self.front == -1:
+            self.front = 0
+        self.rear += 1
+        self.q[self.rear] = x
 
-    public static void main(String[] args) {
-        // 1. multiple catch: specific first, general last
-        try {
-            int[] a = new int[3];
-            a[5] = 10 / 2;
-        } catch (ArithmeticException e) {
-            System.out.println("Arithmetic: " + e.getMessage());
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Array index: " + e.getMessage());
-        } catch (Exception e) {
-            System.out.println("General: " + e);
-        } finally {
-            System.out.println("finally always runs");
-        }
+    def dequeue(self):
+        if self.front == -1 or self.front > self.rear:
+            print("Queue empty")
+            return None
+        x = self.q[self.front]
+        self.front += 1
+        return x
 
-        // 2. nested try: inner catch doesn't match, outer one handles it
-        try {
-            try {
-                int x = 10 / 0;
-            } catch (NullPointerException e) {
-                System.out.println("Inner caught NPE");
-            }
-        } catch (ArithmeticException e) {
-            System.out.println("Outer caught: " + e.getMessage());
-        }
 
-        // 3. NumberFormatException
-        try {
-            int n = Integer.parseInt("abc");
-        } catch (NumberFormatException e) {
-            System.out.println("Bad number format");
-        }
+# ---------- Circular queue (fixes the wasted space) ----------
+class CircularQueue:
+    def __init__(self, size):
+        self.q = [None] * size
+        self.size = size
+        self.front = self.rear = -1
 
-        // 4. NullPointerException
-        try {
-            String s = null;
-            System.out.println(s.length());
-        } catch (NullPointerException e) {
-            System.out.println("Null reference used");
-        }
+    def is_full(self):
+        return (self.rear + 1) % self.size == self.front
 
-        // 5. custom checked exception: must be caught or declared
-        try {
-            withdraw(1000, 500);
-            withdraw(1000, 1500);
-        } catch (InsufficientFundsException e) {
-            System.out.println("Custom: " + e.getMessage());
-        }
-    }
-}
+    def is_empty(self):
+        return self.front == -1
+
+    def enqueue(self, x):
+        if self.is_full():
+            print("Queue full")
+            return
+        if self.is_empty():
+            self.front = 0
+        self.rear = (self.rear + 1) % self.size      # wrap around
+        self.q[self.rear] = x
+
+    def dequeue(self):
+        if self.is_empty():
+            print("Queue empty")
+            return None
+        x = self.q[self.front]
+        if self.front == self.rear:                  # last element removed
+            self.front = self.rear = -1
+        else:
+            self.front = (self.front + 1) % self.size
+        return x
+
+    def display(self):
+        if self.is_empty():
+            print("Queue empty"); return
+        i, out = self.front, []
+        while True:
+            out.append(self.q[i])
+            if i == self.rear:
+                break
+            i = (i + 1) % self.size
+        print("Circular queue:", out)
+
+
+# ---------- Priority queue (lower number = higher priority) ----------
+class PriorityQueue:
+    def __init__(self):
+        self.items = []                              # kept sorted by priority
+
+    def enqueue(self, x, priority):
+        i = 0
+        while i < len(self.items) and self.items[i][1] <= priority:   # same priority keeps FIFO
+            i += 1
+        self.items.insert(i, (x, priority))
+
+    def dequeue(self):
+        return self.items.pop(0)[0] if self.items else None
+
+
+lq = LinearQueue(3)
+for x in (1, 2, 3):
+    lq.enqueue(x)
+print("Linear dequeue:", lq.dequeue())
+lq.enqueue(4)                                         # shows the linear queue problem
+
+cq = CircularQueue(3)
+for x in (1, 2, 3):
+    cq.enqueue(x)
+print("Circular dequeue:", cq.dequeue())
+cq.enqueue(4)                                         # reuses the freed slot
+cq.display()
+
+pq = PriorityQueue()
+pq.enqueue("normal patient", 3)
+pq.enqueue("emergency", 1)
+pq.enqueue("checkup", 5)
+pq.enqueue("serious", 2)
+print("Priority order:", [pq.dequeue() for _ in range(4)])
+# Applications: CPU scheduling, Dijkstra / Prim, hospital triage, printer jobs
 ```
 
-## ThreadBasics
-**Threads, Runnable, synchronized**  
-File: `unit3-oop/ThreadBasics.java` · Run: `javac ThreadBasics.java` → `java ThreadBasics`
+## Call center queue (lab B3)
+File: `unit3-stack-queue-linkedlist/call_center_queue.py`
 
-```java
-// Unit 3: main thread, Runnable, multiple threads, synchronized
-class Counter {
-    int count = 0;
-    synchronized void inc() { count++; }        // only one thread at a time
-}
+```python
+# Lab B3 (syllabus list): Call center call queue
+# addCall(customerID, callTime), answerCall(), viewQueue(), isQueueEmpty()
 
-class Task implements Runnable {                // Runnable = preferred way (class can still extend another)
-    private Counter counter;
-    Task(Counter counter) { this.counter = counter; }
+class CallQueue:
+    def __init__(self):
+        self.calls = []
 
-    public void run() {
-        for (int i = 0; i < 1000; i++) counter.inc();
-        System.out.println(Thread.currentThread().getName() + " finished");
-    }
-}
+    def addCall(self, customerID, callTime):
+        self.calls.append((customerID, callTime))       # enqueue at rear
+        print(f"Call from {customerID} ({callTime} min) added")
 
-public class ThreadBasics {
-    public static void main(String[] args) throws InterruptedException {
-        Thread main = Thread.currentThread();
-        System.out.println("Main thread: " + main.getName() + ", priority " + main.getPriority());
+    def answerCall(self):
+        if self.isQueueEmpty():
+            print("No calls waiting")
+            return
+        cid, t = self.calls.pop(0)                      # dequeue from front
+        print(f"Answered call from {cid} ({t} min)")
 
-        Counter c = new Counter();
-        Thread t1 = new Thread(new Task(c), "Worker-1");
-        Thread t2 = new Thread(new Task(c), "Worker-2");
-        Thread t3 = new Thread(new Task(c), "Worker-3");
+    def viewQueue(self):
+        if self.isQueueEmpty():
+            print("Queue is empty")
+            return
+        for i, (cid, t) in enumerate(self.calls, 1):
+            print(f"  {i}. Customer {cid} - {t} min")
 
-        t1.start(); t2.start(); t3.start();     // start() -> new thread -> run()
-        t1.join(); t2.join(); t3.join();
+    def isQueueEmpty(self):
+        return len(self.calls) == 0
 
-        System.out.println("Final count = " + c.count + " (always 3000 thanks to synchronized)");
-    }
-}
+
+cq = CallQueue()
+while True:
+    print("\n1.Add Call  2.Answer Call  3.View Queue  4.Is Empty?  5.Exit")
+    ch = int(input("Choice: "))
+    if ch == 1:
+        cq.addCall(input("Customer ID: "), int(input("Call time (minutes): ")))
+    elif ch == 2:
+        cq.answerCall()
+    elif ch == 3:
+        cq.viewQueue()
+    elif ch == 4:
+        print("Empty" if cq.isQueueEmpty() else "Not empty")
+    elif ch == 5:
+        break
+    else:
+        print("Invalid choice")
 ```
 
-## Transform3D
-**3D translate / scale / rotate (cube)**  
-File: `unit5-transforms/Transform3D.java` · Run: `javac Transform3D.java` → `java Transform3D`
+## Linked lists (singly, doubly, circular)
+File: `unit3-stack-queue-linkedlist/linked_lists.py`
 
-```java
-// Unit 5: 3D transformations with 4x4 homogeneous matrices (console output, no window)
-// translate, scale, rotate about X / Y / Z axis, applied to the 8 corners of a unit cube
-import java.util.Scanner;
+```python
+# Unit III: Singly, Doubly and Circular linked lists
+# Primitive operations: create, traverse, search, insert, delete, sort, concatenate (+ reverse)
 
-public class Transform3D {
-    static double[][] translate(double tx, double ty, double tz) {
-        return new double[][]{{1,0,0,tx},{0,1,0,ty},{0,0,1,tz},{0,0,0,1}};
-    }
-    static double[][] scale(double sx, double sy, double sz) {
-        return new double[][]{{sx,0,0,0},{0,sy,0,0},{0,0,sz,0},{0,0,0,1}};
-    }
-    static double[][] rotateX(double deg) {          // y' = y cos - z sin, z' = y sin + z cos
-        double c = Math.cos(Math.toRadians(deg)), s = Math.sin(Math.toRadians(deg));
-        return new double[][]{{1,0,0,0},{0,c,-s,0},{0,s,c,0},{0,0,0,1}};
-    }
-    static double[][] rotateY(double deg) {          // z' = z cos - x sin, x' = z sin + x cos
-        double c = Math.cos(Math.toRadians(deg)), s = Math.sin(Math.toRadians(deg));
-        return new double[][]{{c,0,s,0},{0,1,0,0},{-s,0,c,0},{0,0,0,1}};
-    }
-    static double[][] rotateZ(double deg) {          // x' = x cos - y sin, y' = x sin + y cos
-        double c = Math.cos(Math.toRadians(deg)), s = Math.sin(Math.toRadians(deg));
-        return new double[][]{{c,-s,0,0},{s,c,0,0},{0,0,1,0},{0,0,0,1}};
-    }
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
 
-    static double[] apply(double[][] m, double[] p) {
-        double[] r = new double[4];
-        for (int i = 0; i < 4; i++)
-            for (int k = 0; k < 4; k++)
-                r[i] += m[i][k] * p[k];
-        return r;
-    }
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        double[][] cube = {
-            {0,0,0,1},{1,0,0,1},{1,1,0,1},{0,1,0,1},
-            {0,0,1,1},{1,0,1,1},{1,1,1,1},{0,1,1,1}
-        };
+class SinglyLinkedList:
+    def __init__(self):
+        self.head = None
 
-        System.out.println("1.Translate 2.Scale 3.Rotate X 4.Rotate Y 5.Rotate Z");
-        int ch = sc.nextInt();
-        double[][] m;
-        switch (ch) {
-            case 1:  System.out.print("tx ty tz: "); m = translate(sc.nextDouble(), sc.nextDouble(), sc.nextDouble()); break;
-            case 2:  System.out.print("sx sy sz: "); m = scale(sc.nextDouble(), sc.nextDouble(), sc.nextDouble()); break;
-            case 3:  System.out.print("angle: ");    m = rotateX(sc.nextDouble()); break;
-            case 4:  System.out.print("angle: ");    m = rotateY(sc.nextDouble()); break;
-            default: System.out.print("angle: ");    m = rotateZ(sc.nextDouble());
-        }
+    def create(self, values):
+        for v in values:
+            self.insert_end(v)
 
-        for (double[] p : cube) {
-            double[] q = apply(m, p);
-            System.out.printf("(%.0f,%.0f,%.0f) -> (%.2f, %.2f, %.2f)%n", p[0], p[1], p[2], q[0], q[1], q[2]);
-        }
-    }
+    def traverse(self):
+        temp, out = self.head, []
+        while temp:
+            out.append(str(temp.data))
+            temp = temp.next
+        print(" -> ".join(out) + " -> None")
+
+    def search(self, key):
+        temp, pos = self.head, 0
+        while temp:
+            if temp.data == key:
+                return pos
+            temp, pos = temp.next, pos + 1
+        return -1
+
+    def insert_begin(self, x):
+        new = Node(x)
+        new.next = self.head
+        self.head = new
+
+    def insert_end(self, x):
+        new = Node(x)
+        if self.head is None:
+            self.head = new
+            return
+        temp = self.head
+        while temp.next:
+            temp = temp.next
+        temp.next = new
+
+    def insert_at(self, pos, x):            # pos 0 = beginning
+        if pos == 0:
+            self.insert_begin(x)
+            return
+        temp = self.head
+        for _ in range(pos - 1):
+            if temp is None:
+                print("Position out of range"); return
+            temp = temp.next
+        if temp is None:
+            print("Position out of range"); return
+        new = Node(x)
+        new.next = temp.next
+        temp.next = new
+
+    def delete(self, key):
+        if self.head and self.head.data == key:
+            self.head = self.head.next
+            return True
+        prev = self.head
+        while prev and prev.next:
+            if prev.next.data == key:
+                prev.next = prev.next.next
+                return True
+            prev = prev.next
+        return False
+
+    def sort(self):                         # bubble sort by swapping data
+        i = self.head
+        while i:
+            j = i.next
+            while j:
+                if i.data > j.data:
+                    i.data, j.data = j.data, i.data
+                j = j.next
+            i = i.next
+
+    def concatenate(self, other):
+        if self.head is None:
+            self.head = other.head
+            return
+        temp = self.head
+        while temp.next:
+            temp = temp.next
+        temp.next = other.head
+
+    def reverse(self):
+        prev, cur = None, self.head
+        while cur:
+            nxt = cur.next
+            cur.next = prev
+            prev, cur = cur, nxt
+        self.head = prev
+
+
+# ---------- Doubly linked list ----------
+class DNode:
+    def __init__(self, data):
+        self.data = data
+        self.prev = self.next = None
+
+
+class DoublyLinkedList:
+    def __init__(self):
+        self.head = None
+
+    def insert_end(self, x):
+        new = DNode(x)
+        if self.head is None:
+            self.head = new
+            return
+        temp = self.head
+        while temp.next:
+            temp = temp.next
+        temp.next = new
+        new.prev = temp
+
+    def delete(self, key):
+        temp = self.head
+        while temp and temp.data != key:
+            temp = temp.next
+        if temp is None:
+            return False
+        if temp.prev:
+            temp.prev.next = temp.next
+        else:
+            self.head = temp.next           # deleting head
+        if temp.next:
+            temp.next.prev = temp.prev
+        return True
+
+    def display(self):
+        temp, fwd, last = self.head, [], None
+        while temp:
+            fwd.append(str(temp.data))
+            last = temp
+            temp = temp.next
+        back = []
+        while last:
+            back.append(str(last.data))
+            last = last.prev
+        print("Forward :", " <-> ".join(fwd))
+        print("Backward:", " <-> ".join(back))
+
+
+# ---------- Circular singly linked list ----------
+class CircularLinkedList:
+    def __init__(self):
+        self.head = None
+
+    def insert_end(self, x):
+        new = Node(x)
+        if self.head is None:
+            self.head = new
+            new.next = new                  # points to itself
+            return
+        temp = self.head
+        while temp.next != self.head:
+            temp = temp.next
+        temp.next = new
+        new.next = self.head
+
+    def delete(self, key):
+        if self.head is None:
+            return False
+        cur, prev = self.head, None
+        while True:
+            if cur.data == key:
+                if prev is None:            # deleting head
+                    if cur.next == self.head:
+                        self.head = None
+                        return True
+                    last = self.head
+                    while last.next != self.head:
+                        last = last.next
+                    self.head = cur.next
+                    last.next = self.head
+                else:
+                    prev.next = cur.next
+                return True
+            prev, cur = cur, cur.next
+            if cur == self.head:
+                return False
+
+    def display(self):
+        if self.head is None:
+            print("Empty"); return
+        temp, out = self.head, []
+        while True:
+            out.append(str(temp.data))
+            temp = temp.next
+            if temp == self.head:
+                break
+        print(" -> ".join(out) + " -> (back to head)")
+
+
+s = SinglyLinkedList()
+s.create([40, 10, 30])
+s.insert_begin(5); s.insert_end(50); s.insert_at(2, 25)
+s.traverse()
+print("search 30 at position", s.search(30))
+s.delete(10); s.traverse()
+s.sort(); s.traverse()
+t = SinglyLinkedList(); t.create([60, 70])
+s.concatenate(t); s.traverse()
+s.reverse(); s.traverse()
+
+d = DoublyLinkedList()
+for x in (1, 2, 3, 4):
+    d.insert_end(x)
+d.delete(1); d.delete(3)
+d.display()
+
+c = CircularLinkedList()
+for x in (7, 8, 9):
+    c.insert_end(x)
+c.delete(7)
+c.display()
+```
+
+## Stack and queue using a linked list
+File: `unit3-stack-queue-linkedlist/stack_queue_using_linked_list.py`
+
+```python
+# Unit III case study: Stack and Queue implemented with linked lists (no size limit)
+
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+
+class LinkedStack:                  # push/pop at head -> O(1)
+    def __init__(self):
+        self.top = None
+
+    def push(self, x):
+        new = Node(x)
+        new.next = self.top
+        self.top = new
+
+    def pop(self):
+        if self.top is None:
+            print("Stack underflow")
+            return None
+        x = self.top.data
+        self.top = self.top.next
+        return x
+
+    def display(self):
+        temp, out = self.top, []
+        while temp:
+            out.append(temp.data)
+            temp = temp.next
+        print("Stack (top first):", out)
+
+
+class LinkedQueue:                  # enqueue at rear, dequeue at front -> both O(1)
+    def __init__(self):
+        self.front = self.rear = None
+
+    def enqueue(self, x):
+        new = Node(x)
+        if self.rear is None:
+            self.front = self.rear = new
+            return
+        self.rear.next = new
+        self.rear = new
+
+    def dequeue(self):
+        if self.front is None:
+            print("Queue underflow")
+            return None
+        x = self.front.data
+        self.front = self.front.next
+        if self.front is None:
+            self.rear = None
+        return x
+
+    def display(self):
+        temp, out = self.front, []
+        while temp:
+            out.append(temp.data)
+            temp = temp.next
+        print("Queue (front first):", out)
+
+
+st = LinkedStack()
+for x in (1, 2, 3):
+    st.push(x)
+st.display()
+print("popped", st.pop())
+st.display()
+
+q = LinkedQueue()
+for x in ("a", "b", "c"):
+    q.enqueue(x)
+q.display()
+print("dequeued", q.dequeue())
+q.display()
+```
+
+# Unit IV – Hashing
+
+## Extendible hashing (lab C3)
+File: `unit4-hashing/extendible_hashing.py`
+
+```python
+# Lab C3 (syllabus list): Extendible hashing
+# Directory of 2^global_depth pointers to buckets. A bucket that overflows SPLITS;
+# if its local depth == global depth, the directory DOUBLES first.
+# Index = last `global_depth` bits of the key (key % 2^gd).
+
+BUCKET_SIZE = 2
+
+
+class Bucket:
+    def __init__(self, depth):
+        self.depth = depth          # local depth
+        self.items = {}             # key -> value
+
+
+class ExtendibleHash:
+    def __init__(self):
+        self.gd = 1                                   # global depth
+        self.dir = [Bucket(1), Bucket(1)]
+
+    def index(self, key):
+        return key % (2 ** self.gd)                   # last gd bits
+
+    def search(self, key):
+        return self.dir[self.index(key)].items.get(key)
+
+    def insert(self, key, value):
+        b = self.dir[self.index(key)]
+        if key in b.items or len(b.items) < BUCKET_SIZE:
+            b.items[key] = value
+            return
+        self.split(b)                                 # bucket full -> split, then retry
+        self.insert(key, value)
+
+    def split(self, b):
+        if b.depth == self.gd:                        # directory must double
+            self.dir = self.dir + self.dir
+            self.gd += 1
+            print(f"  directory doubled -> global depth {self.gd}")
+        b.depth += 1
+        new = Bucket(b.depth)
+        bit = 1 << (b.depth - 1)                      # the new bit that separates them
+        for i in range(len(self.dir)):                # re-point half of b's entries
+            if self.dir[i] is b and i & bit:
+                self.dir[i] = new
+        old = b.items
+        b.items = {}
+        for k, v in old.items():                      # redistribute keys
+            self.dir[self.index(k)].items[k] = v
+        print(f"  bucket split -> local depth {b.depth}")
+
+    def delete(self, key):
+        b = self.dir[self.index(key)]
+        if key in b.items:
+            del b.items[key]
+            return True
+        return False
+
+    def display(self):
+        print(f"Global depth = {self.gd}")
+        for i, b in enumerate(self.dir):
+            print(f"  {i:0{self.gd}b} -> (local {b.depth}) {b.items}")
+
+
+eh = ExtendibleHash()
+while True:
+    print("\n1.Insert  2.Search  3.Delete  4.Display  5.Exit")
+    ch = int(input("Choice: "))
+    if ch == 1:
+        k = int(input("Key: "))
+        eh.insert(k, input("Value: "))
+    elif ch == 2:
+        v = eh.search(int(input("Key: ")))
+        print(f"Value = {v}" if v is not None else "Key not found")
+    elif ch == 3:
+        print("Deleted" if eh.delete(int(input("Key: "))) else "Key not found")
+    elif ch == 4:
+        eh.display()
+    elif ch == 5:
+        break
+    else:
+        print("Invalid choice")
+```
+
+## Dictionary with hashing and rehashing
+File: `unit4-hashing/dictionary_hash.py`
+
+```python
+# Unit IV case study: Dictionary (word -> meaning) using a hash table with chaining
+# String keys are turned into a number first, then the division method is applied.
+# Load factor = n / size. When it passes 0.75 the table is REHASHED into double the size.
+
+class Dictionary:
+    def __init__(self, size=5):
+        self.size = size
+        self.count = 0
+        self.table = [[] for _ in range(size)]
+
+    def h(self, word):
+        total = 0
+        for ch in word.lower():
+            total = total * 31 + ord(ch)          # polynomial rolling hash
+        return total % self.size                  # division method
+
+    def insert(self, word, meaning):
+        chain = self.table[self.h(word)]
+        for pair in chain:
+            if pair[0] == word:
+                pair[1] = meaning                 # update existing word
+                return
+        chain.append([word, meaning])
+        self.count += 1
+        if self.count / self.size > 0.75:
+            self.rehash()
+
+    def search(self, word):
+        for w, m in self.table[self.h(word)]:
+            if w == word:
+                return m
+        return None
+
+    def delete(self, word):
+        chain = self.table[self.h(word)]
+        for i, (w, m) in enumerate(chain):
+            if w == word:
+                chain.pop(i)
+                self.count -= 1
+                return True
+        return False
+
+    def rehash(self):
+        old = self.table
+        self.size *= 2
+        self.table = [[] for _ in range(self.size)]
+        self.count = 0
+        for chain in old:
+            for w, m in chain:
+                self.insert(w, m)
+        print(f"  (rehashed to size {self.size})")
+
+    def display(self):
+        print(f"size={self.size} words={self.count} load factor={self.count / self.size:.2f}")
+        for i, chain in enumerate(self.table):
+            if chain:
+                print(f"  {i}: " + " -> ".join(w for w, m in chain))
+
+
+d = Dictionary()
+words = {
+    "array": "fixed-size collection of elements",
+    "stack": "LIFO list",
+    "queue": "FIFO list",
+    "graph": "nodes connected by edges",
+    "tree": "hierarchical structure with a root",
+    "hash": "maps a key to a table index",
 }
+for w, m in words.items():
+    d.insert(w, m)
+d.display()
+print("queue ->", d.search("queue"))
+d.delete("stack")
+print("stack ->", d.search("stack"))
+d.display()
+
+# Collision-handling terms:
+#   Open hashing / separate chaining / closed addressing: colliding keys stored in a chain.
+#   Closed hashing / open addressing: colliding key probes other slots (linear, quadratic, double hashing).
+#   Synonyms = keys with the same hash value. Perfect hash function = no collisions.
+```
+
+# Unit V – Graphs and trees
+
+## Prim, Kruskal, Dijkstra (lab D2)
+File: `unit5-graphs-trees/mst_and_shortest_path.py`
+
+```python
+# Unit V: Minimum Spanning Tree (Prim, Kruskal) and shortest path (Dijkstra)
+# Lab D2 (pizza delivery): locations = nodes, travel time = edge weight.
+# Prim/Kruskal give the cheapest network of roads that reaches every customer;
+# Dijkstra gives the fastest time from the shop to each customer (GPS case study).
+
+INF = float("inf")
+places = ["Shop", "A", "B", "C", "D"]
+n = len(places)
+# undirected weighted edges (u, v, minutes)
+edges = [(0, 1, 4), (0, 2, 2), (1, 2, 1), (1, 3, 5), (2, 3, 8), (2, 4, 10), (3, 4, 2)]
+
+cost = [[INF] * n for _ in range(n)]           # adjacency (cost) matrix
+for u, v, w in edges:
+    cost[u][v] = cost[v][u] = w
+
+
+def prim(start=0):                              # grow one tree, always take the cheapest edge out of it
+    in_tree = [False] * n
+    key = [INF] * n                             # cheapest edge connecting node to the tree
+    parent = [-1] * n
+    key[start] = 0
+    for _ in range(n):
+        u = -1
+        for v in range(n):                      # pick the closest node not yet in the tree
+            if not in_tree[v] and (u == -1 or key[v] < key[u]):
+                u = v
+        in_tree[u] = True
+        for v in range(n):                      # update neighbours
+            if not in_tree[v] and cost[u][v] < key[v]:
+                key[v] = cost[u][v]
+                parent[v] = u
+    total = 0
+    print("Prim MST:")
+    for v in range(n):
+        if parent[v] != -1:
+            print(f"  {places[parent[v]]} - {places[v]} : {cost[v][parent[v]]}")
+            total += cost[v][parent[v]]
+    print("  Total =", total)                   # O(V^2) with a matrix
+
+
+def find(parent, x):                            # union-find: root of x's set
+    while parent[x] != x:
+        x = parent[x]
+    return x
+
+
+def kruskal():                                  # sort all edges, add if it doesn't make a cycle
+    parent = list(range(n))
+    total = 0
+    print("Kruskal MST:")
+    for u, v, w in sorted(edges, key=lambda e: e[2]):
+        ru, rv = find(parent, u), find(parent, v)
+        if ru != rv:                            # different sets -> no cycle
+            parent[ru] = rv
+            total += w
+            print(f"  {places[u]} - {places[v]} : {w}")
+    print("  Total =", total)                   # O(E log E)
+
+
+def dijkstra(src=0):                            # shortest time from src to every node
+    dist = [INF] * n
+    done = [False] * n
+    prev = [-1] * n
+    dist[src] = 0
+    for _ in range(n):
+        u = -1
+        for v in range(n):
+            if not done[v] and (u == -1 or dist[v] < dist[u]):
+                u = v
+        done[u] = True
+        for v in range(n):
+            if cost[u][v] != INF and dist[u] + cost[u][v] < dist[v]:
+                dist[v] = dist[u] + cost[u][v]   # relax the edge
+                prev[v] = u
+    print(f"Dijkstra from {places[src]}:")
+    for v in range(n):
+        path, x = [], v
+        while x != -1:
+            path.append(places[x])
+            x = prev[x]
+        print(f"  {places[v]:<5} time {dist[v]:>2}  path {' -> '.join(reversed(path))}")
+
+
+prim()
+kruskal()
+dijkstra()
+```
+
+## Binary tree traversals
+File: `unit5-graphs-trees/binary_tree_traversals.py`
+
+```python
+# Unit V: Binary tree - recursive and NON-recursive traversals, height, leaves, mirror, copy
+#
+#            1
+#          /   \
+#         2     3
+#        / \     \
+#       4   5     6
+
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.left = self.right = None
+
+
+root = Node(1)
+root.left, root.right = Node(2), Node(3)
+root.left.left, root.left.right = Node(4), Node(5)
+root.right.right = Node(6)
+
+
+# ---------- Recursive ----------
+def inorder(r):
+    return inorder(r.left) + [r.data] + inorder(r.right) if r else []
+
+
+def preorder(r):
+    return [r.data] + preorder(r.left) + preorder(r.right) if r else []
+
+
+def postorder(r):
+    return postorder(r.left) + postorder(r.right) + [r.data] if r else []
+
+
+# ---------- Non-recursive (using a stack) ----------
+def inorder_iter(r):
+    st, out, cur = [], [], r
+    while cur or st:
+        while cur:                      # go as far left as possible
+            st.append(cur)
+            cur = cur.left
+        cur = st.pop()
+        out.append(cur.data)
+        cur = cur.right
+    return out
+
+
+def preorder_iter(r):
+    if r is None:
+        return []
+    st, out = [r], []
+    while st:
+        cur = st.pop()
+        out.append(cur.data)
+        if cur.right:                   # push right first so left is processed first
+            st.append(cur.right)
+        if cur.left:
+            st.append(cur.left)
+    return out
+
+
+def postorder_iter(r):                  # two-stack method
+    if r is None:
+        return []
+    s1, s2 = [r], []
+    while s1:
+        cur = s1.pop()
+        s2.append(cur.data)
+        if cur.left:
+            s1.append(cur.left)
+        if cur.right:
+            s1.append(cur.right)
+    return s2[::-1]
+
+
+def level_order(r):                     # BFS with a queue
+    q, out = [r], []
+    while q:
+        cur = q.pop(0)
+        out.append(cur.data)
+        if cur.left:
+            q.append(cur.left)
+        if cur.right:
+            q.append(cur.right)
+    return out
+
+
+# ---------- Other operations ----------
+def height(r):
+    return 0 if r is None else 1 + max(height(r.left), height(r.right))
+
+
+def count_leaves(r):
+    if r is None:
+        return 0
+    if r.left is None and r.right is None:
+        return 1
+    return count_leaves(r.left) + count_leaves(r.right)
+
+
+def mirror(r):
+    if r:
+        r.left, r.right = mirror(r.right), mirror(r.left)
+    return r
+
+
+def copy(r):
+    if r is None:
+        return None
+    new = Node(r.data)
+    new.left, new.right = copy(r.left), copy(r.right)
+    return new
+
+
+print("Inorder   :", inorder(root), inorder_iter(root))
+print("Preorder  :", preorder(root), preorder_iter(root))
+print("Postorder :", postorder(root), postorder_iter(root))
+print("Level     :", level_order(root))
+print("Height =", height(root), " Leaves =", count_leaves(root))
+m = mirror(copy(root))
+print("Mirror inorder:", inorder(m), " original unchanged:", inorder(root))
+
+# Properties: max nodes at level i = 2^i (root level 0); max nodes in height h = 2^h - 1;
+# leaves = nodes with 2 children + 1.
+# General tree -> binary tree: left pointer = first child, right pointer = next sibling.
+```
+
+## Expression tree from prefix (lab D4)
+File: `unit5-graphs-trees/expression_tree.py`
+
+```python
+# Lab D4 (syllabus list): Expression tree from a PREFIX expression, e.g. +--a*bc/def
+# Traverse it with NON-recursive postorder, then delete the whole tree.
+
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.left = self.right = None
+
+
+def build_from_prefix(exp):
+    # Scan right to left: operand -> push node; operator -> pop two, make them its children
+    st = []
+    for ch in reversed(exp):
+        node = Node(ch)
+        if ch in "+-*/^":
+            node.left = st.pop()        # first pop is the LEFT operand when scanning right-to-left
+            node.right = st.pop()
+        st.append(node)
+    return st.pop()
+
+
+def postorder_nonrecursive(root):      # two stacks
+    if root is None:
+        return ""
+    s1, s2 = [root], []
+    while s1:
+        cur = s1.pop()
+        s2.append(cur)
+        if cur.left:
+            s1.append(cur.left)
+        if cur.right:
+            s1.append(cur.right)
+    return "".join(n.data for n in reversed(s2))
+
+
+def inorder(r):                         # fully bracketed infix, to check the tree
+    if r is None:
+        return ""
+    if r.left is None:
+        return r.data
+    return "(" + inorder(r.left) + r.data + inorder(r.right) + ")"
+
+
+def delete_tree(root):                  # postorder delete: children before parent
+    if root is None:
+        return 0
+    count = delete_tree(root.left) + delete_tree(root.right)
+    root.left = root.right = None
+    del root
+    return count + 1
+
+
+exp = input("Prefix expression (e.g. +--a*bc/def): ").strip() or "+--a*bc/def"
+root = build_from_prefix(exp)
+print("Infix    :", inorder(root))
+print("Postfix  :", postorder_nonrecursive(root))
+print("Deleted", delete_tree(root), "nodes")
+root = None
+print("Tree is now", "empty" if root is None else "not empty")
+```
+
+## City population BST (lab D5)
+File: `unit5-graphs-trees/city_population_bst.py`
+
+```python
+# Lab D5 (syllabus list): City names + populations stored in a BST (ordered by city name)
+# Add, delete, update population, display ascending/descending, max comparisons to search
+
+class Node:
+    def __init__(self, city, pop):
+        self.city = city
+        self.pop = pop
+        self.left = self.right = None
+
+
+def insert(root, city, pop):
+    if root is None:
+        return Node(city, pop)
+    if city < root.city:
+        root.left = insert(root.left, city, pop)
+    elif city > root.city:
+        root.right = insert(root.right, city, pop)
+    else:
+        print("City already exists")
+    return root
+
+
+def delete(root, city):
+    if root is None:
+        print("City not found")
+        return None
+    if city < root.city:
+        root.left = delete(root.left, city)
+    elif city > root.city:
+        root.right = delete(root.right, city)
+    else:
+        if root.left is None:
+            return root.right
+        if root.right is None:
+            return root.left
+        s = root.right
+        while s.left:
+            s = s.left
+        root.city, root.pop = s.city, s.pop
+        root.right = delete(root.right, s.city)
+    return root
+
+
+def search(root, city):                 # returns (node, comparisons used)
+    comps = 0
+    while root:
+        comps += 1
+        if city == root.city:
+            return root, comps
+        root = root.left if city < root.city else root.right
+    return None, comps
+
+
+def height(root):                       # max comparisons for any search = height
+    return 0 if root is None else 1 + max(height(root.left), height(root.right))
+
+
+def ascending(r):
+    if r:
+        ascending(r.left)
+        print(f"  {r.city:<12}{r.pop}")
+        ascending(r.right)
+
+
+def descending(r):
+    if r:
+        descending(r.right)
+        print(f"  {r.city:<12}{r.pop}")
+        descending(r.left)
+
+
+root = None
+while True:
+    print("\n1.Add  2.Delete  3.Update population  4.Ascending  5.Descending  6.Search  7.Exit")
+    ch = int(input("Choice: "))
+    if ch == 1:
+        root = insert(root, input("City: "), int(input("Population: ")))
+    elif ch == 2:
+        root = delete(root, input("City: "))
+    elif ch == 3:
+        node, _ = search(root, input("City: "))
+        if node:
+            node.pop = int(input("New population: "))
+            print("Updated")
+        else:
+            print("City not found")
+    elif ch == 4:
+        ascending(root)
+    elif ch == 5:
+        descending(root)
+    elif ch == 6:
+        node, c = search(root, input("City: "))
+        print(f"Found {node.city}: {node.pop}" if node else "Not found", f"({c} comparisons)")
+        print("Maximum comparisons for any city =", height(root))
+    elif ch == 7:
+        break
+    else:
+        print("Invalid choice")
+```
+
+## Propositional formula tree (lab D6)
+File: `unit5-graphs-trees/propositional_formula_tree.py`
+
+```python
+# Lab D6 (syllabus list): Read a propositional calculus formula and build its binary tree
+# Operators by precedence (high to low):  ~ (not)   & (and)   | (or)   > (implies)
+# Variables are single letters. Example: (p&q)|~r>s
+# Each character is read once -> building the tree is O(n) time, O(n) space.
+
+class Node:
+    def __init__(self, data, left=None, right=None):
+        self.data = data
+        self.left = left
+        self.right = right
+
+
+class Parser:                           # recursive descent: one function per precedence level
+    def __init__(self, s):
+        self.s = s.replace(" ", "")
+        self.i = 0
+
+    def peek(self):
+        return self.s[self.i] if self.i < len(self.s) else None
+
+    def take(self):
+        ch = self.s[self.i]
+        self.i += 1
+        return ch
+
+    def implies(self):                  # right-associative: a > b > c = a > (b > c)
+        left = self.disj()
+        if self.peek() == ">":
+            self.take()
+            return Node(">", left, self.implies())
+        return left
+
+    def disj(self):
+        left = self.conj()
+        while self.peek() == "|":
+            self.take()
+            left = Node("|", left, self.conj())
+        return left
+
+    def conj(self):
+        left = self.neg()
+        while self.peek() == "&":
+            self.take()
+            left = Node("&", left, self.neg())
+        return left
+
+    def neg(self):
+        if self.peek() == "~":
+            self.take()
+            return Node("~", None, self.neg())     # unary: only a right child
+        if self.peek() == "(":
+            self.take()
+            node = self.implies()
+            self.take()                             # ")"
+            return node
+        return Node(self.take())                    # variable
+
+
+def show(r, indent=""):                 # sideways tree: right subtree on top
+    if r:
+        show(r.right, indent + "      ")
+        print(indent + r.data)
+        show(r.left, indent + "      ")
+
+
+def to_infix(r):
+    if r is None:
+        return ""
+    if r.data == "~":
+        return "~" + to_infix(r.right)
+    if r.left is None:
+        return r.data
+    return "(" + to_infix(r.left) + " " + r.data + " " + to_infix(r.right) + ")"
+
+
+formula = input("Formula (e.g. (p&q)|~r>s): ").strip() or "(p&q)|~r>s"
+tree = Parser(formula).implies()
+print("Fully bracketed:", to_infix(tree))
+print("Tree (rotated 90 degrees, root on the left):")
+show(tree)
+```
+
+## Huffman coding
+File: `unit5-graphs-trees/huffman_coding.py`
+
+```python
+# Unit V case study: ZIP/GZIP-style compression with a Huffman tree
+# Repeatedly join the two LEAST frequent nodes (greedy). Frequent characters get shorter codes.
+
+class Node:
+    def __init__(self, freq, ch=None, left=None, right=None):
+        self.freq = freq
+        self.ch = ch
+        self.left = left
+        self.right = right
+
+
+def build_huffman(text):
+    freq = {}
+    for c in text:
+        freq[c] = freq.get(c, 0) + 1
+    nodes = [Node(f, c) for c, f in freq.items()]
+    while len(nodes) > 1:
+        nodes.sort(key=lambda n: n.freq)         # a priority queue would be O(log n) per step
+        a = nodes.pop(0)
+        b = nodes.pop(0)
+        nodes.append(Node(a.freq + b.freq, None, a, b))
+    return nodes[0], freq
+
+
+def make_codes(node, code="", codes=None):
+    if codes is None:
+        codes = {}
+    if node.ch is not None:                     # leaf
+        codes[node.ch] = code or "0"
+    else:
+        make_codes(node.left, code + "0", codes)
+        make_codes(node.right, code + "1", codes)
+    return codes
+
+
+def decode(root, bits):
+    out, cur = "", root
+    for b in bits:
+        cur = cur.left if b == "0" else cur.right
+        if cur.ch is not None:
+            out += cur.ch
+            cur = root
+    return out
+
+
+text = "abracadabra"
+root, freq = build_huffman(text)
+codes = make_codes(root)
+for c in sorted(codes, key=lambda c: -freq[c]):
+    print(f"  '{c}' freq {freq[c]}  code {codes[c]}")
+encoded = "".join(codes[c] for c in text)
+print("Encoded:", encoded)
+print(f"Bits: {len(encoded)} vs {len(text) * 8} uncompressed")
+print("Decoded:", decode(root, encoded))
 ```

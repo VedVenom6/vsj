@@ -1,50 +1,50 @@
-# OOPCG Java – Lab & Concept Code
+# DS Python – Lab, Practical & Unit Code
 
-Java programs for SPPU SE Computer (2024 Pattern) **Object Oriented Programming & Computer Graphics Lab** (PCC-205-COM), organised by syllabus unit. Every file is self-contained: one public class, its own `main`, no packages.
+Python programs for SPPU SE Computer (2024 Pattern) **Data Structures** (PCC-201-COM) and **Data Structures Laboratory** (PCC-204-COM). Every file is self-contained and runs with `python3 file.py`.
 
 ## Copy-paste quickly
-Open **[ALL_CODE.md](ALL_CODE.md)**: every program on one page, in syllabus lab order (A1–A7, B1–B8), each with its problem statement.
+Open **[ALL_CODE.md](ALL_CODE.md)**: every program on one page, practicals first.
 
-All 21 programs compile and run (verified with JDK, Nov 2026). Graphics labs need a desktop window.
+All 30 programs were run and checked with Python 3 (Nov 2026).
 
-## Run any program
-```bash
-cd unit3-oop
-javac ATM.java
-java ATM
-```
-Graphics programs (unit4, unit5 `Transform2D`) open a Swing window, so they need a desktop (not a headless terminal).
+## Practical exam programs (`practicals/`)
 
-## Contents
+| Code | File | Program | Chits |
+|---|---|---|---|
+| GA1 | `GA1_library_borrowing.py` | Library borrowing: average, highest/lowest, zero borrows, mode, complexity | 1, 2, 3, 4, 5, 19 |
+| GA2 | `GA2_customer_search.py` | Customer IDs: linear + binary search (iterative and recursive) | 1, 6, 18 |
+| GA3 | `GA3_salary_sort.py` | Salaries: selection + bubble sort, top 5 | 2, 7, 17 |
+| GB4 | `GB4_undo_redo_stack.py` | Text editor undo/redo with two stacks | 3, 8, 16, 20 |
+| GB5 | `GB5_event_queue.py` | Event processing queue: add, process, display, cancel | 4, 9, 15, 20 |
+| GB6 | `GB6_student_linked_list.py` | Student records in a linked list: add, delete, update, search, sort asc/desc | 5, 10, 14, 19 |
+| GC7 | `GC7_hash_chaining.py` | Hash table size 10, division method, chaining | 6, 10, 13, 18 |
+| GC8 | `GC8_hash_linear_probing.py` | Fixed-size hash table, division method, linear probing | 7, 12, 17 |
+| GD9 | `GD9_graph_bfs_dfs.py` | City graph: DFS on adjacency matrix, BFS on adjacency list | 8, 11, 16 |
+| GD10 | `GD10_bst.py` | BST: insert, delete, search, display | 9, 11, 12, 13, 14, 15 |
+
+## Basics and syllabus units
 
 | Folder | File | What it covers |
 |---|---|---|
-| unit1-basics | `Basics.java` | Data types, casting, operators, if/else, switch, all loops, break/continue |
-| | `Calculator.java` | **Lab A1** – menu-driven calculator (do-while + switch) |
-| | `ArrayStats.java` | Array input, sum / largest / even count |
-| unit2-classes | `StudentDemo.java` | Class, constructors (default/param/copy), `this`, `static`, getters/setters, overloading, array of objects |
-| | `Order.java` | **Lab A2** – e-commerce order, overloaded constructors, discount, invoice |
-| | `Hotel.java` | **Lab A3** – hotel booking with a 2D array |
-| | `ArgsAndIO.java` | Passing arrays, varargs, command-line args, BufferedReader, PrintWriter |
-| unit3-oop | `SingleInheritance.java` | **Lab A4** – single + multilevel inheritance, `super`, overriding |
-| | `MultipleInterface.java` | **Lab A5** – multiple inheritance via interfaces, polymorphism |
-| | `ShapesAbstract.java` | Abstract class, dynamic binding, `final`, `toString` |
-| | `ATM.java` | **Lab A6** – ATM with try / multiple catch / finally / throw |
-| | `ExceptionDemo.java` | Built-in exceptions, nested try, throws, custom exception |
-| | `Chat.java` | **Lab A7** – multithreaded chat: isAlive, join, priorities, pause/resume/stop |
-| | `ThreadBasics.java` | Main thread, Runnable, multiple threads, synchronized |
-| unit4-graphics | `Lines.java` | **Lab B1** – DDA (dotted/thick rectangles) + Bresenham (dashed/solid diamond) |
-| | `Circles.java` | **Lab B2** – DDA / Bresenham / Midpoint circles, solid/dotted/dashed |
-| | `PolygonFill.java` | **Lab B3** – concave polygon: scan-line, flood, seed/boundary fill |
-| | `SutherlandHodgeman.java` | **Lab B4** – polygon clipping, vertices entered interactively |
-| | `CohenSutherland.java` | **Lab B5** – line clipping with outcodes |
-| unit5-transforms | `Transform2D.java` | **Labs B6, B7, B8** – translate/scale/rotate/shear/reflect, triangle & rhombus, rotation about arbitrary point |
-| | `Transform3D.java` | 3D translate / scale / rotate about X, Y, Z (4×4 matrices) |
-| specific | – | Programs for specific problem statements, added later |
+| 00-basics | `python_basics.py` | Input patterns, lists, 2D lists, dicts, functions, recursion, classes, menu skeleton |
+| unit1-complexity | `complexity_step_count.py` | Step count, O(log n) / O(n) / O(n²) / O(n³) |
+| | `divide_conquer_product_sort.py` | Case study: e-commerce product sorting (merge sort) |
+| | `greedy_calendar.py` | Case study: calendar scheduling (greedy activity selection) |
+| unit2-arrays-search-sort | `arrays_matrices.py` | Array ADT, address formulas, matrix add/multiply/transpose, sparse matrix, social network matrix |
+| | `searching.py` | Linear, sentinel, binary, Fibonacci, indexed sequential |
+| | `sorting.py` | Bubble, selection, insertion, quick, merge with passes |
+| unit3-stack-queue-linkedlist | `stack_expressions.py` | Stack, two stacks in one array, infix → postfix/prefix, postfix evaluation |
+| | `queues.py` | Linear, circular, priority queue |
+| | `call_center_queue.py` | **Lab B3** – call center queue |
+| | `linked_lists.py` | Singly (all primitive ops), doubly, circular |
+| | `stack_queue_using_linked_list.py` | Case study: stack and queue on a linked list |
+| unit4-hashing | `extendible_hashing.py` | **Lab C3** – extendible hashing |
+| | `dictionary_hash.py` | Case study: dictionary with chaining and rehashing |
+| unit5-graphs-trees | `mst_and_shortest_path.py` | **Lab D2** – Prim, Kruskal, Dijkstra (pizza delivery / GPS) |
+| | `binary_tree_traversals.py` | Recursive + non-recursive traversals, height, leaves, mirror |
+| | `expression_tree.py` | **Lab D4** – expression tree from prefix, non-recursive postorder, delete |
+| | `city_population_bst.py` | **Lab D5** – city BST, asc/desc, max comparisons |
+| | `propositional_formula_tree.py` | **Lab D6** – formula → binary tree |
+| | `huffman_coding.py` | Case study: Huffman compression |
 
-## Quick theory reminders
-- **Bresenham vs DDA:** Bresenham uses only integer add/subtract; DDA uses floating point + rounding.
-- **Cohen–Sutherland:** both outcodes 0000 → accept; `code1 & code2 != 0` → reject; else clip and repeat.
-- **Sutherland–Hodgeman cases:** in→in: V2 · in→out: intersection · out→out: nothing · out→in: intersection + V2.
-- **Rotation about a point:** `T(xr,yr) · R(θ) · T(−xr,−yr)`.
-- **suspend/resume/stop** are deprecated (deadlock / inconsistent state) → use flags.
+The earlier OOPCG Java code is kept under the git tag `oopcg-java`.
