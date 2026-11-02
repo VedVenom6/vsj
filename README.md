@@ -47,4 +47,4 @@ All 30 programs were run and checked with Python 3 (Nov 2026).
 | | `propositional_formula_tree.py` | **Lab D6** – formula → binary tree |
 | | `huffman_coding.py` | Case study: Huffman compression |
 
-The earlier OOPCG Java code is kept under the git tag `oopcg-java`.
+The earlier OOPCG Java code is still in the repo history at commit [`2a125ae`](https://github.com/VedVenom6/vsj/tree/2a125ae).
